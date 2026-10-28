@@ -1,0 +1,1028 @@
+{
+ "PK_FallenIdle": {
+  "contact": 0.008,
+  "foot": "l",
+  "foot_peak_speed": 1.3,
+  "head_peak": 0.325,
+  "head_peak_speed": 8.1,
+  "length": 1.5,
+  "min_head_z": 39.8,
+  "pelvis_start": [
+   -0.7,
+   -0.4,
+   20.3
+  ],
+  "pelvis_travel": [
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "PK_GoalkeeperBodyBlock": {
+  "contact": 0.958,
+  "foot": "r",
+  "foot_peak_speed": 571.2,
+  "head_peak": 0.858,
+  "head_peak_speed": 436.2,
+  "length": 2.633,
+  "min_head_z": 27.4,
+  "pelvis_start": [
+   0.0,
+   1.1,
+   88.8
+  ],
+  "pelvis_travel": [
+   23.7,
+   63.4,
+   0.0
+  ]
+ },
+ "PK_GoalkeeperBodyBlock_2": {
+  "contact": 0.892,
+  "foot": "l",
+  "foot_peak_speed": 548.3,
+  "head_peak": 0.575,
+  "head_peak_speed": 460.7,
+  "length": 2.467,
+  "min_head_z": 25.3,
+  "pelvis_start": [
+   0.1,
+   1.1,
+   88.8
+  ],
+  "pelvis_travel": [
+   -37.3,
+   44.6,
+   0.0
+  ]
+ },
+ "PK_GoalkeeperBodyBlock_3": {
+  "contact": 1.158,
+  "foot": "r",
+  "foot_peak_speed": 631.7,
+  "head_peak": 0.975,
+  "head_peak_speed": 399.3,
+  "length": 3.433,
+  "min_head_z": 19.5,
+  "pelvis_start": [
+   -0.0,
+   1.1,
+   86.5
+  ],
+  "pelvis_travel": [
+   77.1,
+   20.9,
+   -3.5
+  ]
+ },
+ "PK_GoalkeeperCatch": {
+  "contact": 1.05,
+  "foot": "l",
+  "foot_peak_speed": 489.3,
+  "head_peak": 0.58,
+  "head_peak_speed": 323.5,
+  "length": 2.1,
+  "min_head_z": 75.1,
+  "pelvis_start": [
+   0.0,
+   1.1,
+   88.8
+  ],
+  "pelvis_travel": [
+   -72.1,
+   86.4,
+   -3.6
+  ]
+ },
+ "PK_GoalkeeperCatch_2": {
+  "contact": 0.752,
+  "foot": "l",
+  "foot_peak_speed": 434.5,
+  "head_peak": 0.954,
+  "head_peak_speed": 129.7,
+  "length": 1.267,
+  "min_head_z": 143.7,
+  "pelvis_start": [
+   0.0,
+   1.1,
+   88.8
+  ],
+  "pelvis_travel": [
+   -37.6,
+   49.6,
+   -3.5
+  ]
+ },
+ "PK_GoalkeeperCatch_3": {
+  "contact": 0.892,
+  "foot": "l",
+  "foot_peak_speed": 1092.7,
+  "head_peak": 1.925,
+  "head_peak_speed": 424.7,
+  "length": 2.7,
+  "min_head_z": 129.4,
+  "pelvis_start": [
+   0.0,
+   1.1,
+   88.8
+  ],
+  "pelvis_travel": [
+   69.1,
+   391.6,
+   -3.5
+  ]
+ },
+ "PK_GoalkeeperCatch_4": {
+  "contact": 0.592,
+  "foot": "l",
+  "foot_peak_speed": 342.9,
+  "head_peak": 1.225,
+  "head_peak_speed": 290.2,
+  "length": 2.733,
+  "min_head_z": 122.9,
+  "pelvis_start": [
+   0.0,
+   1.1,
+   88.8
+  ],
+  "pelvis_travel": [
+   -4.1,
+   52.6,
+   -3.5
+  ]
+ },
+ "PK_GoalkeeperDirecting": {
+  "contact": 1.345,
+  "foot": "l",
+  "foot_peak_speed": 881.3,
+  "head_peak": 1.211,
+  "head_peak_speed": 270.7,
+  "length": 7.167,
+  "min_head_z": 140.6,
+  "pelvis_start": [
+   0.1,
+   1.1,
+   85.2
+  ],
+  "pelvis_travel": [
+   -0.0,
+   169.9,
+   0.0
+  ]
+ },
+ "PK_GoalkeeperDirecting_2": {
+  "contact": 4.418,
+  "foot": "l",
+  "foot_peak_speed": 505.1,
+  "head_peak": 5.22,
+  "head_peak_speed": 222.7,
+  "length": 7.7,
+  "min_head_z": 136.8,
+  "pelvis_start": [
+   0.0,
+   1.1,
+   88.8
+  ],
+  "pelvis_travel": [
+   13.0,
+   -90.0,
+   -0.0
+  ]
+ },
+ "PK_GoalkeeperDivingSave": {
+  "contact": 1.358,
+  "foot": "l",
+  "foot_peak_speed": 732.6,
+  "head_peak": 1.242,
+  "head_peak_speed": 473.8,
+  "length": 3.4,
+  "min_head_z": 20.7,
+  "pelvis_start": [
+   0.0,
+   1.1,
+   88.8
+  ],
+  "pelvis_travel": [
+   208.1,
+   173.5,
+   -3.5
+  ]
+ },
+ "PK_GoalkeeperDivingSave_2": {
+  "contact": 1.292,
+  "foot": "r",
+  "foot_peak_speed": 931.9,
+  "head_peak": 1.375,
+  "head_peak_speed": 530.5,
+  "length": 3.233,
+  "min_head_z": 27.8,
+  "pelvis_start": [
+   0.0,
+   1.1,
+   88.8
+  ],
+  "pelvis_travel": [
+   -258.6,
+   97.7,
+   -3.5
+  ]
+ },
+ "PK_GoalkeeperDropKick": {
+  "contact": 2.092,
+  "foot": "r",
+  "foot_peak_speed": 1596.1,
+  "head_peak": 1.708,
+  "head_peak_speed": 242.3,
+  "length": 3.9,
+  "min_head_z": 137.8,
+  "pelvis_start": [
+   0.1,
+   1.1,
+   85.2
+  ],
+  "pelvis_travel": [
+   -21.5,
+   319.1,
+   3.5
+  ]
+ },
+ "PK_GoalkeeperIdle": {
+  "contact": 0.176,
+  "foot": "r",
+  "foot_peak_speed": 25.1,
+  "head_peak": 1.146,
+  "head_peak_speed": 53.1,
+  "length": 4.633,
+  "min_head_z": 136.2,
+  "pelvis_start": [
+   0.0,
+   1.1,
+   88.8
+  ],
+  "pelvis_travel": [
+   -0.0,
+   -0.0,
+   -0.0
+  ]
+ },
+ "PK_GoalkeeperIdle_2": {
+  "contact": 0.327,
+  "foot": "l",
+  "foot_peak_speed": 3.0,
+  "head_peak": 0.31,
+  "head_peak_speed": 21.4,
+  "length": 3.333,
+  "min_head_z": 145.7,
+  "pelvis_start": [
+   0.1,
+   1.1,
+   85.2
+  ],
+  "pelvis_travel": [
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "PK_GoalkeeperMiss": {
+  "contact": 0.942,
+  "foot": "l",
+  "foot_peak_speed": 484.5,
+  "head_peak": 0.408,
+  "head_peak_speed": 264.2,
+  "length": 2.933,
+  "min_head_z": 110.8,
+  "pelvis_start": [
+   0.0,
+   1.1,
+   88.8
+  ],
+  "pelvis_travel": [
+   -48.5,
+   54.3,
+   -3.5
+  ]
+ },
+ "PK_GoalkeeperOverhandThrow": {
+  "contact": 0.679,
+  "foot": "l",
+  "foot_peak_speed": 790.9,
+  "head_peak": 1.299,
+  "head_peak_speed": 415.5,
+  "length": 2.833,
+  "min_head_z": 131.8,
+  "pelvis_start": [
+   0.2,
+   1.1,
+   85.2
+  ],
+  "pelvis_travel": [
+   3.3,
+   364.0,
+   3.5
+  ]
+ },
+ "PK_GoalkeeperPass": {
+  "contact": 0.608,
+  "foot": "l",
+  "foot_peak_speed": 565.6,
+  "head_peak": 0.592,
+  "head_peak_speed": 264.8,
+  "length": 3.133,
+  "min_head_z": 79.3,
+  "pelvis_start": [
+   0.1,
+   1.1,
+   85.2
+  ],
+  "pelvis_travel": [
+   12.2,
+   75.3,
+   3.5
+  ]
+ },
+ "PK_GoalkeeperPlacingBall": {
+  "contact": 2.403,
+  "foot": "r",
+  "foot_peak_speed": 699.2,
+  "head_peak": 1.181,
+  "head_peak_speed": 312.1,
+  "length": 3.533,
+  "min_head_z": 85.4,
+  "pelvis_start": [
+   -0.0,
+   1.1,
+   85.2
+  ],
+  "pelvis_travel": [
+   -0.1,
+   115.3,
+   3.5
+  ]
+ },
+ "PK_GoalkeeperPlacingBall_2": {
+  "contact": 5.858,
+  "foot": "r",
+  "foot_peak_speed": 1854.6,
+  "head_peak": 5.808,
+  "head_peak_speed": 311.7,
+  "length": 7.967,
+  "min_head_z": 67.8,
+  "pelvis_start": [
+   -4.4,
+   0.7,
+   85.2
+  ],
+  "pelvis_travel": [
+   7.4,
+   315.2,
+   3.5
+  ]
+ },
+ "PK_GoalkeeperScoop": {
+  "contact": 0.965,
+  "foot": "l",
+  "foot_peak_speed": 715.3,
+  "head_peak": 0.512,
+  "head_peak_speed": 353.5,
+  "length": 2.6,
+  "min_head_z": 57.7,
+  "pelvis_start": [
+   -0.1,
+   1.1,
+   88.8
+  ],
+  "pelvis_travel": [
+   -47.4,
+   374.9,
+   -3.5
+  ]
+ },
+ "PK_GoalkeeperSidestep": {
+  "contact": 0.308,
+  "foot": "l",
+  "foot_peak_speed": 1086.4,
+  "head_peak": 0.475,
+  "head_peak_speed": 287.9,
+  "length": 0.533,
+  "min_head_z": 126.0,
+  "pelvis_start": [
+   0.2,
+   1.5,
+   75.9
+  ],
+  "pelvis_travel": [
+   115.7,
+   0.0,
+   0.0
+  ]
+ },
+ "PK_GoalkeeperSidestep_2": {
+  "contact": 0.192,
+  "foot": "l",
+  "foot_peak_speed": 959.1,
+  "head_peak": 0.325,
+  "head_peak_speed": 425.3,
+  "length": 0.5,
+  "min_head_z": 124.4,
+  "pelvis_start": [
+   0.0,
+   1.5,
+   76.0
+  ],
+  "pelvis_travel": [
+   -144.4,
+   -0.0,
+   0.0
+  ]
+ },
+ "PK_HeaderSoccerball": {
+  "contact": 1.253,
+  "foot": "r",
+  "foot_peak_speed": 97.4,
+  "head_peak": 0.916,
+  "head_peak_speed": 100.8,
+  "length": 1.9,
+  "min_head_z": 147.4,
+  "pelvis_start": [
+   -0.1,
+   -0.2,
+   92.5
+  ],
+  "pelvis_travel": [
+   -0.0,
+   -0.0,
+   -0.0
+  ]
+ },
+ "PK_HeaderSoccerball_2": {
+  "contact": 0.142,
+  "foot": "l",
+  "foot_peak_speed": 234.1,
+  "head_peak": 0.778,
+  "head_peak_speed": 76.4,
+  "length": 4.2,
+  "min_head_z": 143.9,
+  "pelvis_start": [
+   -0.1,
+   -0.2,
+   92.5
+  ],
+  "pelvis_travel": [
+   0.0,
+   -0.0,
+   -0.0
+  ]
+ },
+ "PK_JogBackward": {
+  "contact": 0.742,
+  "foot": "l",
+  "foot_peak_speed": 623.5,
+  "head_peak": 0.142,
+  "head_peak_speed": 284.8,
+  "length": 0.8,
+  "min_head_z": 152.2,
+  "pelvis_start": [
+   -0.2,
+   -0.0,
+   90.3
+  ],
+  "pelvis_travel": [
+   0.0,
+   -175.5,
+   0.0
+  ]
+ },
+ "PK_JogBackwardDiagonal": {
+  "contact": 0.058,
+  "foot": "r",
+  "foot_peak_speed": 577.4,
+  "head_peak": 0.725,
+  "head_peak_speed": 256.8,
+  "length": 0.733,
+  "min_head_z": 153.4,
+  "pelvis_start": [
+   -0.2,
+   -0.0,
+   88.5
+  ],
+  "pelvis_travel": [
+   -110.6,
+   -108.7,
+   0.0
+  ]
+ },
+ "PK_JogBackwardDiagonal_2": {
+  "contact": 0.383,
+  "foot": "r",
+  "foot_peak_speed": 620.6,
+  "head_peak": 0.349,
+  "head_peak_speed": 277.6,
+  "length": 0.833,
+  "min_head_z": 153.5,
+  "pelvis_start": [
+   0.1,
+   0.0,
+   93.3
+  ],
+  "pelvis_travel": [
+   137.8,
+   -140.1,
+   -0.0
+  ]
+ },
+ "PK_JogForward": {
+  "contact": 0.451,
+  "foot": "r",
+  "foot_peak_speed": 700.2,
+  "head_peak": 0.757,
+  "head_peak_speed": 283.6,
+  "length": 0.833,
+  "min_head_z": 153.9,
+  "pelvis_start": [
+   -0.1,
+   0.1,
+   92.0
+  ],
+  "pelvis_travel": [
+   0.0,
+   198.6,
+   0.0
+  ]
+ },
+ "PK_JogForwardDiagonal": {
+  "contact": 0.458,
+  "foot": "l",
+  "foot_peak_speed": 782.1,
+  "head_peak": 0.725,
+  "head_peak_speed": 301.2,
+  "length": 0.8,
+  "min_head_z": 153.3,
+  "pelvis_start": [
+   -0.3,
+   0.1,
+   89.1
+  ],
+  "pelvis_travel": [
+   -150.6,
+   150.7,
+   -0.0
+  ]
+ },
+ "PK_JogForwardDiagonal_2": {
+  "contact": 0.026,
+  "foot": "r",
+  "foot_peak_speed": 735.6,
+  "head_peak": 0.621,
+  "head_peak_speed": 324.8,
+  "length": 0.833,
+  "min_head_z": 153.1,
+  "pelvis_start": [
+   -0.1,
+   0.3,
+   91.3
+  ],
+  "pelvis_travel": [
+   149.1,
+   147.2,
+   -0.0
+  ]
+ },
+ "PK_JogStrafeLeft": {
+  "contact": 0.35,
+  "foot": "r",
+  "foot_peak_speed": 788.4,
+  "head_peak": 0.35,
+  "head_peak_speed": 311.4,
+  "length": 0.7,
+  "min_head_z": 153.7,
+  "pelvis_start": [
+   -0.3,
+   0.2,
+   89.1
+  ],
+  "pelvis_travel": [
+   194.2,
+   0.0,
+   0.0
+  ]
+ },
+ "PK_JogStrafeRight": {
+  "contact": 0.375,
+  "foot": "l",
+  "foot_peak_speed": 636.3,
+  "head_peak": 0.342,
+  "head_peak_speed": 251.1,
+  "length": 0.733,
+  "min_head_z": 156.9,
+  "pelvis_start": [
+   -0.1,
+   0.4,
+   95.6
+  ],
+  "pelvis_travel": [
+   -162.1,
+   0.4,
+   0.1
+  ]
+ },
+ "PK_KickSoccerball": {
+  "contact": 0.524,
+  "foot": "l",
+  "foot_peak_speed": 683.3,
+  "head_peak": 0.318,
+  "head_peak_speed": 60.9,
+  "length": 0.567,
+  "min_head_z": 150.6,
+  "pelvis_start": [
+   -0.2,
+   0.5,
+   93.2
+  ],
+  "pelvis_travel": [
+   0.0,
+   0.0,
+   -0.0
+  ]
+ },
+ "PK_KickSoccerball_2": {
+  "contact": 0.425,
+  "foot": "r",
+  "foot_peak_speed": 683.6,
+  "head_peak": 0.025,
+  "head_peak_speed": 100.7,
+  "length": 0.5,
+  "min_head_z": 150.7,
+  "pelvis_start": [
+   -0.1,
+   0.5,
+   93.2
+  ],
+  "pelvis_travel": [
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "PK_KickUpSoccerball": {
+  "contact": 1.258,
+  "foot": "l",
+  "foot_peak_speed": 399.2,
+  "head_peak": 1.325,
+  "head_peak_speed": 62.3,
+  "length": 1.333,
+  "min_head_z": 149.6,
+  "pelvis_start": [
+   0.0,
+   0.1,
+   94.2
+  ],
+  "pelvis_travel": [
+   -5.4,
+   -7.2,
+   -1.0
+  ]
+ },
+ "PK_KneeingSoccerball": {
+  "contact": 0.705,
+  "foot": "l",
+  "foot_peak_speed": 257.2,
+  "head_peak": 0.79,
+  "head_peak_speed": 39.9,
+  "length": 0.9,
+  "min_head_z": 154.7,
+  "pelvis_start": [
+   -0.1,
+   0.5,
+   93.2
+  ],
+  "pelvis_travel": [
+   0.0,
+   -0.0,
+   0.0
+  ]
+ },
+ "PK_KneeingSoccerball_2": {
+  "contact": 0.111,
+  "foot": "r",
+  "foot_peak_speed": 361.5,
+  "head_peak": 0.351,
+  "head_peak_speed": 36.0,
+  "length": 0.633,
+  "min_head_z": 155.9,
+  "pelvis_start": [
+   -0.1,
+   -0.2,
+   92.5
+  ],
+  "pelvis_travel": [
+   0.0,
+   -0.0,
+   -0.0
+  ]
+ },
+ "PK_OffensiveIdle": {
+  "contact": 1.911,
+  "foot": "l",
+  "foot_peak_speed": 203.5,
+  "head_peak": 2.279,
+  "head_peak_speed": 77.7,
+  "length": 10.567,
+  "min_head_z": 158.7,
+  "pelvis_start": [
+   -0.0,
+   -0.0,
+   95.2
+  ],
+  "pelvis_travel": [
+   -0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "PK_ReceiveSoccerball": {
+  "contact": 0.042,
+  "foot": "l",
+  "foot_peak_speed": 885.9,
+  "head_peak": 0.008,
+  "head_peak_speed": 318.9,
+  "length": 5.133,
+  "min_head_z": 144.8,
+  "pelvis_start": [
+   -0.1,
+   0.0,
+   90.8
+  ],
+  "pelvis_travel": [
+   -7.5,
+   262.1,
+   3.4
+  ]
+ },
+ "PK_ScissorKick": {
+  "contact": 0.746,
+  "foot": "r",
+  "foot_peak_speed": 1243.4,
+  "head_peak": 0.981,
+  "head_peak_speed": 429.0,
+  "length": 2.767,
+  "min_head_z": 9.4,
+  "pelvis_start": [
+   -0.1,
+   1.1,
+   88.8
+  ],
+  "pelvis_travel": [
+   17.9,
+   -22.5,
+   -0.0
+  ]
+ },
+ "PK_SoccerPenaltyKick": {
+  "contact": 0.725,
+  "foot": "r",
+  "foot_peak_speed": 1204.3,
+  "head_peak": 1.125,
+  "head_peak_speed": 367.5,
+  "length": 1.5,
+  "min_head_z": 136.7,
+  "pelvis_start": [
+   -13.1,
+   29.0,
+   86.3
+  ],
+  "pelvis_travel": [
+   -74.9,
+   277.3,
+   7.8
+  ]
+ },
+ "PK_SoccerTackle": {
+  "contact": 0.625,
+  "foot": "r",
+  "foot_peak_speed": 1367.5,
+  "head_peak": 0.992,
+  "head_peak_speed": 529.4,
+  "length": 2.733,
+  "min_head_z": 13.5,
+  "pelvis_start": [
+   -0.0,
+   0.0,
+   90.6
+  ],
+  "pelvis_travel": [
+   71.6,
+   364.3,
+   -1.9
+  ]
+ },
+ "PK_SoccerTackle_2": {
+  "contact": 0.143,
+  "foot": "l",
+  "foot_peak_speed": 1818.2,
+  "head_peak": 0.076,
+  "head_peak_speed": 683.5,
+  "length": 1.767,
+  "min_head_z": 31.5,
+  "pelvis_start": [
+   -0.0,
+   -0.0,
+   90.5
+  ],
+  "pelvis_travel": [
+   1.8,
+   425.5,
+   -1.7
+  ]
+ },
+ "PK_SoccerTackle_3": {
+  "contact": 0.294,
+  "foot": "r",
+  "foot_peak_speed": 1055.0,
+  "head_peak": 0.646,
+  "head_peak_speed": 431.0,
+  "length": 2.3,
+  "min_head_z": 24.8,
+  "pelvis_start": [
+   0.0,
+   1.1,
+   88.8
+  ],
+  "pelvis_travel": [
+   -0.0,
+   -0.0,
+   0.0
+  ]
+ },
+ "PK_SoccerTrip": {
+  "contact": 0.658,
+  "foot": "r",
+  "foot_peak_speed": 1230.5,
+  "head_peak": 0.508,
+  "head_peak_speed": 724.3,
+  "length": 1.6,
+  "min_head_z": 13.4,
+  "pelvis_start": [
+   -0.0,
+   0.1,
+   90.5
+  ],
+  "pelvis_travel": [
+   -110.1,
+   375.7,
+   -70.2
+  ]
+ },
+ "PK_StallSoccerball": {
+  "contact": 2.823,
+  "foot": "l",
+  "foot_peak_speed": 342.0,
+  "head_peak": 2.622,
+  "head_peak_speed": 82.5,
+  "length": 3.267,
+  "min_head_z": 150.2,
+  "pelvis_start": [
+   -0.1,
+   0.5,
+   93.2
+  ],
+  "pelvis_travel": [
+   -0.0,
+   -0.0,
+   -0.0
+  ]
+ },
+ "PK_StallSoccerball_2": {
+  "contact": 1.808,
+  "foot": "r",
+  "foot_peak_speed": 494.8,
+  "head_peak": 0.042,
+  "head_peak_speed": 72.0,
+  "length": 2.133,
+  "min_head_z": 150.6,
+  "pelvis_start": [
+   -0.1,
+   0.5,
+   93.2
+  ],
+  "pelvis_travel": [
+   0.0,
+   -0.0,
+   -0.0
+  ]
+ },
+ "PK_StallSoccerball_3": {
+  "contact": 1.956,
+  "foot": "l",
+  "foot_peak_speed": 403.2,
+  "head_peak": 1.721,
+  "head_peak_speed": 66.1,
+  "length": 2.3,
+  "min_head_z": 152.9,
+  "pelvis_start": [
+   -0.2,
+   -0.1,
+   92.5
+  ],
+  "pelvis_travel": [
+   0.0,
+   0.0,
+   -0.0
+  ]
+ },
+ "PK_StallSoccerball_4": {
+  "contact": 1.408,
+  "foot": "r",
+  "foot_peak_speed": 302.1,
+  "head_peak": 1.058,
+  "head_peak_speed": 58.4,
+  "length": 1.833,
+  "min_head_z": 155.3,
+  "pelvis_start": [
+   -0.1,
+   -0.2,
+   92.5
+  ],
+  "pelvis_travel": [
+   0.5,
+   0.3,
+   -0.0
+  ]
+ },
+ "PK_StandingUp": {
+  "contact": 1.019,
+  "foot": "r",
+  "foot_peak_speed": 544.8,
+  "head_peak": 1.423,
+  "head_peak_speed": 281.2,
+  "length": 1.667,
+  "min_head_z": 40.4,
+  "pelvis_start": [
+   -0.7,
+   -0.2,
+   20.3
+  ],
+  "pelvis_travel": [
+   -85.1,
+   -4.1,
+   68.5
+  ]
+ },
+ "PK_StrikeFowardJog": {
+  "contact": 0.447,
+  "foot": "r",
+  "foot_peak_speed": 1684.5,
+  "head_peak": 0.616,
+  "head_peak_speed": 299.7,
+  "length": 1.3,
+  "min_head_z": 145.5,
+  "pelvis_start": [
+   0.0,
+   -0.0,
+   90.5
+  ],
+  "pelvis_travel": [
+   -0.0,
+   287.3,
+   0.0
+  ]
+ },
+ "PK_ThrowIn": {
+  "contact": 1.082,
+  "foot": "l",
+  "foot_peak_speed": 646.5,
+  "head_peak": 1.484,
+  "head_peak_speed": 301.1,
+  "length": 2.767,
+  "min_head_z": 138.6,
+  "pelvis_start": [
+   0.0,
+   0.2,
+   90.6
+  ],
+  "pelvis_travel": [
+   -38.1,
+   302.0,
+   4.6
+  ]
+ },
+ "PK_Transition": {
+  "contact": 0.179,
+  "foot": "r",
+  "foot_peak_speed": 199.5,
+  "head_peak": 0.043,
+  "head_peak_speed": 46.1,
+  "length": 0.767,
+  "min_head_z": 156.1,
+  "pelvis_start": [
+   -0.2,
+   0.5,
+   93.2
+  ],
+  "pelvis_travel": [
+   -2.5,
+   -1.1,
+   1.0
+  ]
+ }
+}

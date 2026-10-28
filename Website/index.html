@@ -1,0 +1,1057 @@
+<meta charset="utf-8">
+<title>Kick Off</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@1,700;1,800;1,900&family=Graduate&family=Saira+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: a matchday told in minutes. Pick a kit (two complete looks), then the story runs 1' to 90' with a match
+   timeline in the header, an LED ribbon board, a penalty shootout to play, and the ticket that is the download. */
+/* Layout: a matchday told in minutes, laid on the pitch. Bands alternate like mowing stripes and meet at chalk lines;
+   the referee's yellow and red cards are the accents. Pick a kit (two looks), then the story runs 1' to 90'. */
+:root {
+  /* home kit: the pitch on matchday */
+  --bg: #0e4a25;         /* mowing stripe, dark */
+  --bg-2: #125a2d;       /* mowing stripe, light */
+  --panel: #0a3519;      /* dugout green */
+  --panel-2: #14572c;
+  --line: rgb(255 255 255 / 0.22);   /* chalk */
+  --chalk: #f7f9f3;
+  --ink: #f7f9f3;
+  --mute: #c3dcc6;
+  --accent: #ffd21a;     /* yellow card */
+  --accent-ink: #1d1700;
+  --red: #e0222b;        /* red card */
+  --glow: rgb(255 210 26 / 0.35);
+  --tag-bg: var(--accent);
+  --tag-ink: var(--accent-ink);
+  --tag-rot: -4deg;
+  --display: "Kanit", "Arial Black", Impact, sans-serif;
+  --num: "Graduate", "Rockwell", "Courier New", serif;
+  --body: "Barlow", "Segoe UI", system-ui, sans-serif;
+  --label: "Saira Condensed", "Bahnschrift", "Arial Narrow", sans-serif;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  --header: 64px;
+  color-scheme: dark;
+}
+:root[data-kit="away"] {
+  /* away kit: under the floodlights, night pitch and the red card */
+  --bg: #08160d;
+  --bg-2: #0c1f12;
+  --panel: #061009;
+  --panel-2: #102a18;
+  --line: rgb(255 255 255 / 0.18);
+  --ink: #f4f6ef;
+  --mute: #a9bfae;
+  --accent: #e0222b;
+  --accent-ink: #ffffff;
+  --glow: rgb(224 34 43 / 0.4);
+  --tag-bg: #ffd21a;
+  --tag-ink: #1d1700;
+  --tag-rot: 3deg;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header) + 16px); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1.0625rem/1.6 var(--body); transition: background 0.5s ease, color 0.5s ease; }
+main > .band:nth-of-type(odd) { background-color: var(--bg-2); }
+main > .band { border-top: 3px solid var(--chalk); transition: background-color 0.5s ease; }
+/* faint pitch markings: the centre circle, the penalty arc, the corner quadrant */
+.mark-circle { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='560' height='560'><circle cx='280' cy='280' r='230' fill='none' stroke='white' stroke-opacity='0.13' stroke-width='4'/><circle cx='280' cy='280' r='7' fill='white' fill-opacity='0.2'/><line x1='280' y1='0' x2='280' y2='560' stroke='white' stroke-opacity='0.13' stroke-width='4'/></svg>"); background-repeat: no-repeat; background-position: right -170px top -60px; }
+.mark-box { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='640' height='300'><path d='M20 0 V170 H620 V0 M200 170 A120 120 0 0 0 440 170' fill='none' stroke='white' stroke-opacity='0.12' stroke-width='4'/></svg>"); background-repeat: no-repeat; background-position: left -40px top 0; }
+.mark-corner { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><path d='M0 60 A60 60 0 0 0 60 0' fill='none' stroke='white' stroke-opacity='0.16' stroke-width='4'/></svg>"); background-repeat: no-repeat; background-position: right top; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); }
+/* film grain over everything, very faint */
+body::after { content: ""; position: fixed; inset: 0; z-index: 30; pointer-events: none; opacity: 0.07; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, canvas:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+img { display: block; max-width: 100%; height: auto; }
+h1, h2, h3 { font-family: var(--display); font-style: italic; font-weight: 900; line-height: 0.95; letter-spacing: -0.005em; text-transform: uppercase; text-wrap: balance; margin: 0; }
+h2 { text-shadow: 0 3px 0 rgb(0 0 0 / 0.25); }
+h2 { font-size: clamp(2.4rem, 6.5vw, 4.4rem); }
+h3 { font-size: 1.55rem; font-weight: 800; }
+p { margin: 0; max-width: 65ch; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: var(--gutter-l); padding-right: var(--gutter-r); }
+.band { padding-block: clamp(60px, 9vw, 110px); }
+.lede { color: var(--mute); font-size: 1.15rem; }
+.small { font-size: 0.92rem; color: var(--mute); }
+.head { display: grid; gap: 16px; justify-items: start; margin-bottom: clamp(28px, 4vw, 48px); }
+.tag { display: inline-block; font: 800 0.85rem/1 var(--label); letter-spacing: 0.16em; text-transform: uppercase; background: var(--tag-bg); color: var(--tag-ink); padding: 9px 12px 8px; border-radius: 3px; transform: rotate(var(--tag-rot)); box-shadow: 0 4px 0 rgb(0 0 0 / 0.25); }
+
+/* buttons, with letters that hop on hover */
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 6px; font: 800 1.15rem/1 var(--label); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; border: 0; cursor: pointer; }
+.btn-main { background: var(--accent); color: var(--accent-ink); box-shadow: 0 8px 30px var(--glow); }
+.btn-main[aria-disabled="true"] { background: var(--panel-2); color: var(--mute); box-shadow: none; cursor: default; }
+.btn-ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 2px var(--line); }
+.btn-ghost:hover { box-shadow: inset 0 0 0 2px var(--mute); }
+.hop { gap: 0 !important; }  /* the letters are flex items: no gap between them */
+.hop span { display: inline-block; transition: transform 0.25s cubic-bezier(.3, 1.6, .5, 1); }
+.hop:hover span { transform: translateY(-3px); }
+.hop:hover span:nth-child(2n) { transform: translateY(-5px); }
+
+/* header: crest, name, kit switch, scorebug and the match timeline */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.bar .wrap { display: flex; align-items: center; gap: 16px; height: var(--header); }
+.bar .crest { width: 34px; height: 34px; }
+.bar .name { font: italic 900 1.4rem/1 var(--display); text-transform: uppercase; }
+.kit-switch { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--panel); box-shadow: inset 0 0 0 1px var(--line); }
+.kit-switch button { all: unset; cursor: pointer; padding: 6px 12px; border-radius: 999px; font: 700 0.78rem/1 var(--label); letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); display: inline-flex; align-items: center; gap: 6px; }
+.kit-switch button i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.kit-switch button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.kit-switch button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.scorebug { margin-left: auto; display: inline-flex; align-items: stretch; font: 800 0.95rem/1 var(--label); letter-spacing: 0.06em; border-radius: 6px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line); font-variant-numeric: tabular-nums; }
+.scorebug span { padding: 8px 10px; display: inline-flex; align-items: center; }
+.scorebug .clock { background: var(--accent); color: var(--accent-ink); min-width: 58px; justify-content: center; font: 400 1rem/1 var(--num); }
+.scorebug b { font: 400 1rem/1 var(--num); }
+.scorebug .teams { background: var(--panel); color: var(--ink); gap: 8px; }
+.bar nav { display: flex; gap: 18px; }
+.bar nav a { color: var(--mute); text-decoration: none; font: 600 0.9rem/1 var(--label); letter-spacing: 0.1em; text-transform: uppercase; }
+.bar nav a:hover { color: var(--ink); }
+.timeline { position: relative; height: 3px; background: rgb(255 255 255 / 0.18); }
+.timeline i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--accent); }
+.timeline b { position: absolute; top: -3px; width: 9px; height: 9px; border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 2px var(--line); }
+.timeline b.on { box-shadow: inset 0 0 0 2px var(--accent); background: var(--accent); }
+@media (max-width: 1020px) { .bar nav { display: none; } }
+@media (max-width: 560px) { .bar .name { display: none; } .scorebug .teams { display: none; } }
+
+/* kit picker opener: the title strip, then the two halves meeting at the halfway line */
+.picker { display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: "top top" "home away"; }
+.picker .center { grid-area: top; display: flex; align-items: center; justify-content: center; gap: clamp(16px, 4vw, 40px); padding-block: clamp(18px, 3vw, 28px); padding-left: var(--gutter-l); padding-right: var(--gutter-r); background: var(--panel); border-bottom: 3px solid var(--chalk); text-align: left; }
+.picker .center h1 { margin: 0; flex: 0 1 auto; }
+.picker .center img { width: clamp(220px, 28vw, 340px); }
+.picker .center .pick-copy { display: grid; gap: 8px; max-width: 34ch; }
+.picker .center .pick { font: 800 0.9rem/1 var(--label); letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); }
+.picker .center .pick-copy p { color: var(--mute); font-size: 1.02rem; }
+.half { position: relative; overflow: hidden; display: grid; align-content: end; min-height: clamp(380px, 46vw, 520px); }
+.half-home { grid-area: home; }
+.half-away { grid-area: away; border-left: 3px solid var(--chalk); }
+.half .bgimg { position: absolute; inset: 0; background-size: cover; background-position: center; transform: scale(1.04); transition: transform 1.2s ease; }
+.half:hover .bgimg { transform: scale(1.09); }
+.half-home .bgimg { background-image: linear-gradient(180deg, rgb(10 53 25 / 0.1), rgb(10 53 25 / 0.95) 80%), url("img/behind-goal.jpg"); }
+.half-away .bgimg { background-image: linear-gradient(180deg, rgb(6 16 9 / 0.2), rgb(6 16 9 / 0.96) 80%), url("img/stadium.jpg"); filter: saturate(0.9) contrast(1.08); }
+.half-away .bgimg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 70% 25%, rgb(255 255 240 / 0.16), transparent 45%); }
+.half .inner { position: relative; display: grid; gap: 16px; justify-items: start; align-content: end; padding-block: clamp(28px, 4vw, 48px); padding-left: max(var(--gutter-l), clamp(24px, 4vw, 48px)); padding-right: max(var(--gutter-r), clamp(24px, 4vw, 48px)); }
+.half .word { font: italic 900 clamp(3rem, 6.6vw, 5.6rem)/0.88 "Kanit", Impact, sans-serif; }
+.half-home .word { color: #ffd21a; text-shadow: 0 4px 0 #0a3519, 0 0 40px rgb(255 210 26 / 0.3); }
+.half-away .word { color: #ffffff; text-shadow: 0 4px 0 #e0222b, 0 0 50px rgb(255 255 240 / 0.25); }
+.half p { color: #e4ece4; max-width: 38ch; }
+.half .tagline { font: 800 0.85rem/1 var(--label); letter-spacing: 0.16em; text-transform: uppercase; padding: 9px 12px 8px; border-radius: 3px; }
+.half-home .tagline { background: #ffd21a; color: #1d1700; transform: rotate(-4deg); }
+.half-away .tagline { background: #e0222b; color: #fff; transform: rotate(3deg); }
+.half .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; }
+.half .choose { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; padding: 13px 20px; border-radius: 6px; font: 800 1.05rem/1 var(--label); letter-spacing: 0.1em; text-transform: uppercase; }
+.half-home .choose { background: #ffd21a; color: #1d1700; }
+.half-away .choose { background: #e0222b; color: #fff; }
+.half .choose:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.half .worn { font: 700 0.8rem/1 var(--label); letter-spacing: 0.14em; text-transform: uppercase; color: #fff; opacity: 0; transition: opacity 0.3s; }
+:root:not([data-kit="away"]) .half-home .worn, :root[data-kit="away"] .half-away .worn { opacity: 0.85; }
+@media (max-width: 760px) {
+  .picker { grid-template-columns: 1fr; grid-template-areas: "top" "home" "away"; }
+  .picker .center { flex-direction: column; text-align: center; }
+  .picker .center .pick-copy { justify-items: center; }
+  .half { min-height: 340px; }
+  .half-away { border-left: 0; border-top: 3px solid var(--chalk); }
+}
+
+/* story: 1' to 90' */
+.story { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); }
+@media (max-width: 900px) { .story { grid-template-columns: 1fr; } }
+.stage { position: sticky; top: calc(var(--header) + 28px); align-self: start; aspect-ratio: 16 / 10; max-width: 100%; border-radius: 12px; overflow: hidden; background: #000; box-shadow: 0 24px 60px rgb(0 0 0 / 0.45); }
+.stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.06); transition: opacity 0.7s ease, transform 4s ease; }
+.stage img.on { opacity: 1; transform: scale(1); }
+.stage .minute { position: absolute; left: 16px; top: 14px; font: 400 3.4rem/1 var(--num); color: #fff; text-shadow: 0 4px 20px rgb(0 0 0 / 0.6); font-variant-numeric: tabular-nums; }
+.stage .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 16px 12px; font: 600 0.85rem/1.2 var(--label); letter-spacing: 0.1em; text-transform: uppercase; color: #fff; background: linear-gradient(transparent, rgb(0 0 0 / 0.75)); }
+@media (max-width: 900px) { .stage { display: none; } }
+.steps { display: grid; gap: clamp(64px, 16vh, 160px); padding-block: 4px 22vh; }
+.step { display: grid; gap: 12px; padding-left: 22px; border-left: 3px solid rgb(255 255 255 / 0.25); transition: border-color 0.4s; min-width: 0; }
+.step.on { border-color: var(--accent); }
+.step .m { font: 400 2.5rem/1 var(--num); color: var(--accent); font-variant-numeric: tabular-nums; text-shadow: 0 3px 0 rgb(0 0 0 / 0.25); }
+.step p { color: var(--mute); }
+.step .inline-img { display: none; border-radius: 10px; margin-top: 6px; }
+@media (max-width: 900px) { .steps { gap: 48px; padding-block: 0; } .step .inline-img { display: block; } }
+
+/* LED ribbon board */
+.ribbon { overflow: hidden; background: #05070d; border-block: 2px solid #1b2236; padding-block: 12px; }
+:root[data-kit="away"] .ribbon { background: #0a0909; border-color: #2b2324; }
+.ribbon .track { display: flex; width: max-content; animation: run 38s linear infinite; }
+.ribbon span { font: italic 900 1.7rem/1 var(--display); letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); text-shadow: 0 0 12px var(--glow); padding-right: 40px; white-space: nowrap;
+  -webkit-mask-image: radial-gradient(circle, #000 55%, transparent 60%); -webkit-mask-size: 4px 4px; mask-image: radial-gradient(circle, #000 55%, transparent 60%); mask-size: 4px 4px; }
+.ribbon span::after { content: "◆"; padding-left: 40px; color: var(--ink); }
+@keyframes run { to { transform: translateX(-50%); } }
+
+/* scoreboard stats */
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 860px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.stat { background: #10140f; border-radius: 6px; padding: 20px; border-top: 4px solid var(--accent); display: grid; gap: 8px; min-width: 0; box-shadow: inset 0 0 0 1px var(--line); }
+.odo { display: flex; font: 400 clamp(2.4rem, 5.5vw, 3.5rem)/1 var(--num); color: var(--ink); height: 1em; overflow: hidden; font-variant-numeric: tabular-nums; }
+.odo .col { display: flex; flex-direction: column; transition: transform 1.6s cubic-bezier(.2, .8, .2, 1); }
+.odo .col span, .odo .sep { height: 1em; line-height: 1; }
+.stat .lab { font: 600 0.85rem/1.2 var(--label); letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); }
+
+/* trailer */
+.watch { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: clamp(24px, 5vw, 60px); align-items: center; }
+@media (max-width: 900px) { .watch { grid-template-columns: 1fr; } }
+.trailer { position: relative; border-radius: 12px; overflow: hidden; background: #000; box-shadow: 0 24px 60px rgb(0 0 0 / 0.45); aspect-ratio: 16 / 9; max-width: 100%; margin: 0; }
+.trailer canvas { display: block; width: 100%; height: 100%; }
+.trailer .ctrl { position: absolute; left: 12px; top: 12px; display: flex; gap: 10px; align-items: center; }
+.trailer button { background: rgb(0 0 0 / 0.6); color: #fff; border: 1px solid rgb(255 255 255 / 0.2); border-radius: 6px; padding: 8px 12px; font: 600 0.9rem/1 var(--label); letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+.trailer .ctrl .small { color: #d0d6e6; }
+.trailer .prog { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgb(255 255 255 / 0.12); }
+.trailer .prog i { display: block; height: 100%; width: 0; background: var(--accent); }
+
+/* penalty shootout */
+.shootout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr); gap: clamp(24px, 5vw, 60px); align-items: center; }
+@media (max-width: 900px) { .shootout { grid-template-columns: 1fr; } }
+.pens-board { display: grid; gap: 14px; justify-items: start; }
+.kicks { display: flex; gap: 8px; }
+.kicks i { width: 26px; height: 26px; border-radius: 50%; box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.35); display: grid; place-items: center; font: 700 0.85rem/1 var(--label); font-style: normal; }
+.kicks i.goal { background: var(--accent); box-shadow: none; color: var(--accent-ink); }
+.kicks i.miss { box-shadow: inset 0 0 0 2px var(--mute); color: var(--mute); }
+.pens-score { font: 400 2.8rem/1 var(--num); font-variant-numeric: tabular-nums; }
+.pitch-canvas { width: 100%; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 12px; display: block; cursor: crosshair; touch-action: manipulation; box-shadow: 0 24px 60px rgb(0 0 0 / 0.45); }
+.kbd-hint kbd, kbd { display: inline-block; font: 600 0.86rem/1 var(--label); letter-spacing: 0.04em; padding: 4px 7px 3px; border-radius: 5px; background: var(--panel-2); box-shadow: inset 0 -2px 0 rgb(0 0 0 / 0.35); color: var(--ink); margin: 1px 0; }
+
+/* gallery */
+.gallery { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+.gallery figure { margin: 0; position: relative; border-radius: 8px; overflow: hidden; background: var(--panel); min-width: 0; }
+:root[data-kit="away"] .gallery figure { border-radius: 2px; box-shadow: 0 0 0 6px #f4f6ef; transform: rotate(var(--r, 0deg)); }
+:root[data-kit="away"] .gallery figure:nth-child(3n+1) { --r: -0.8deg; }
+:root[data-kit="away"] .gallery figure:nth-child(3n+2) { --r: 0.7deg; }
+:root[data-kit="away"] .gallery { gap: 22px; }
+.gallery button { all: unset; display: block; cursor: zoom-in; width: 100%; height: 100%; }
+.gallery button:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+.gallery img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; transition: transform 0.4s ease; }
+.gallery figure:hover img { transform: scale(1.03); }
+.gallery figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 12px 9px; font: 600 0.85rem/1.2 var(--label); letter-spacing: 0.08em; text-transform: uppercase; color: #fff; background: linear-gradient(transparent, rgb(0 0 0 / 0.8)); }
+.g-wide { grid-column: span 4; } .g-tall { grid-column: span 2; } .g-third { grid-column: span 2; } .g-half { grid-column: span 3; }
+.g-tall img { aspect-ratio: auto; height: 100%; }
+@media (max-width: 760px) { .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } .g-wide, .g-tall, .g-third, .g-half { grid-column: span 2; } .g-tall img { aspect-ratio: 16 / 9; height: auto; } }
+dialog.lightbox { padding: 0; border: 0; background: transparent; max-width: min(1400px, 96vw); width: 100%; }
+dialog.lightbox::backdrop { background: rgb(0 0 0 / 0.88); }
+dialog.lightbox img { width: 100%; border-radius: 8px; }
+dialog.lightbox .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; }
+dialog.lightbox p { font: 600 1rem/1.2 var(--label); letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
+
+/* controls */
+.controls-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 980px) { .controls-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .controls-grid { grid-template-columns: 1fr; } }
+.ctl { background: var(--panel); border-radius: 10px; padding: 20px 20px 10px; min-width: 0; box-shadow: inset 0 0 0 1px var(--line); }
+.ctl h3 { color: var(--accent); margin-bottom: 10px; }
+.ctl table { width: 100%; border-collapse: collapse; font-size: 0.98rem; }
+.ctl th { text-align: left; font: 600 0.75rem/1 var(--label); letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); padding: 6px 0 8px; }
+.ctl td { padding: 8px 0; border-top: 1px solid var(--line); vertical-align: top; }
+.ctl td:first-child { padding-right: 10px; }
+.ctl td:first-child { width: 46%; }
+.ctl td + td { padding-left: 8px; }
+.ctl td:nth-child(2) { white-space: nowrap; }
+.pad { display: inline-block; font: 600 0.86rem/1 var(--label); padding: 4px 7px 3px; border-radius: 5px; box-shadow: inset 0 0 0 1px var(--line); color: var(--mute); white-space: nowrap; }
+.tips { margin-top: 26px; display: grid; gap: 8px; color: var(--mute); }
+.tips b { color: var(--ink); font-weight: 600; }
+
+/* the ticket: download */
+/* the two halves are separate pieces of card so the stub can tear away; the shadow follows them both */
+.ticket { display: grid; grid-template-columns: minmax(0, 1fr) 200px; color: #1c1a16; max-width: 860px; filter: drop-shadow(0 26px 34px rgb(0 0 0 / 0.45)); }
+@media (max-width: 680px) { .ticket { grid-template-columns: 1fr; } }
+.ticket .main { position: relative; padding: clamp(22px, 4vw, 36px); display: grid; gap: 16px; min-width: 0; background: #ece6d6; border-radius: 14px 0 0 14px; }
+@media (max-width: 680px) { .ticket .main { border-radius: 14px 14px 0 0; } }
+.ticket .admit { font: 700 0.8rem/1 var(--label); letter-spacing: 0.3em; text-transform: uppercase; color: #6d6656; }
+.ticket h3 { font: italic 900 clamp(2.1rem, 5vw, 3.1rem)/0.92 var(--display); color: #1c1a16; }
+.ticket h3 em { font-style: italic; color: #c51d25; }
+.ticket dl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 16px; margin: 0; }
+@media (max-width: 680px) { .ticket dl { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.ticket dt { font: 600 0.72rem/1.2 var(--label); letter-spacing: 0.16em; text-transform: uppercase; color: #6d6656; }
+.ticket dd { margin: 2px 0 0; font: 700 1.1rem/1.15 var(--label); letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
+.ticket .btn-main { background: #1c1a16; color: #ece6d6; box-shadow: none; justify-self: start; }
+.ticket .btn-main[aria-disabled="true"] { background: #cfc7b3; color: #6d6656; }
+.ticket .note { color: #6d6656; font-size: 0.92rem; }
+.ticket .stub { position: relative; border-left: 2px dashed #b8af98; padding: 24px 18px 24px 30px; display: grid; align-content: space-between; gap: 18px; text-align: center; font: 600 0.75rem/1.3 var(--label); letter-spacing: 0.12em; text-transform: uppercase; color: #6d6656; background: #ece6d6; border-radius: 0 14px 14px 0; text-decoration: none; cursor: pointer; transform-origin: 0% 100%; transition: transform 0.25s ease; }
+.ticket .stub:hover { transform: rotate(2deg) translateX(3px); }
+.ticket .stub:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+/* "tear here" along the perforation */
+.ticket .stub .tear-hint { position: absolute; left: 6px; top: 50%; transform: translateY(-50%) rotate(180deg); writing-mode: vertical-rl; font: 800 0.68rem/1 var(--label); letter-spacing: 0.22em; color: #c51d25; white-space: nowrap; }
+/* the tear: a tug, then the stub rips along the perforation and tumbles away */
+@keyframes stub-tear { 0% { transform: none; } 14% { transform: translateX(5px) rotate(-2.5deg); } 30% { transform: translateX(2px) rotate(1deg); } 46% { transform: translate(22px, 4px) rotate(7deg); opacity: 1; } 100% { transform: translate(150px, 460px) rotate(42deg); opacity: 0; } }
+@keyframes ticket-tug { 0%, 100% { transform: none; } 14% { transform: translateX(-4px) rotate(-0.5deg); } 30% { transform: translateX(-1px); } 46% { transform: translateX(-7px) rotate(-0.8deg); } 62% { transform: none; } }
+@keyframes stamp-in { 0% { transform: rotate(-14deg) scale(2.2); opacity: 0; } 70% { transform: rotate(-14deg) scale(0.94); opacity: 1; } 100% { transform: rotate(-14deg) scale(1); opacity: 1; } }
+.ticket.torn .stub { animation: stub-tear 1.25s cubic-bezier(.45, 0, .65, 1) forwards; clip-path: var(--tear-clip, none); pointer-events: none; }
+.ticket.torn .main { animation: ticket-tug 1.25s ease forwards; }
+/* the ragged edge left behind on the ticket */
+.ticket .main::after { content: ""; position: absolute; top: 0; bottom: 0; right: -1px; width: 9px; opacity: 0; background: linear-gradient(-135deg, var(--bg) 4px, transparent 0) 0 0 / 9px 12px, linear-gradient(-45deg, var(--bg) 4px, transparent 0) 0 6px / 9px 12px; transition: opacity 0.15s 0.55s; }
+.ticket.torn .main::after { opacity: 1; }
+.ticket.torn .main { border-radius: 14px 0 0 14px; }
+.ticket .stamp { position: absolute; right: clamp(16px, 4vw, 40px); top: clamp(18px, 4vw, 34px); padding: 10px 14px 8px; border: 4px double #c51d25; border-radius: 8px; color: #c51d25; font: 400 1.15rem/1.1 var(--num); text-align: center; text-transform: uppercase; opacity: 0; transform: rotate(-14deg); pointer-events: none; mix-blend-mode: multiply; }
+.ticket .stamp small { display: block; font: 800 0.7rem/1.2 var(--label); letter-spacing: 0.18em; }
+.ticket.torn .stamp { animation: stamp-in 0.45s 0.75s cubic-bezier(.3, 1.4, .5, 1) forwards; }
+.ticket .again { justify-self: start; background: none; border: 0; padding: 0; color: #6d6656; font: 700 0.85rem/1 var(--label); letter-spacing: 0.12em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+@media (max-width: 680px) {
+  @keyframes stub-tear { 0% { transform: none; } 14% { transform: translateY(5px) rotate(1.5deg); } 30% { transform: translateY(2px); } 46% { transform: translate(6px, 20px) rotate(-4deg); opacity: 1; } 100% { transform: translate(40px, 380px) rotate(-26deg); opacity: 0; } }
+  .ticket .stub { padding: 18px 18px 24px; transform-origin: 100% 0%; }
+  .ticket .stub .tear-hint { left: 50%; top: 6px; transform: translateX(-50%); writing-mode: horizontal-tb; }
+  .ticket .main::after { top: auto; left: 0; right: 0; bottom: -1px; width: auto; height: 9px; background: linear-gradient(135deg, var(--bg) 4px, transparent 0) 0 0 / 12px 9px, linear-gradient(-135deg, var(--bg) 4px, transparent 0) 6px 0 / 12px 9px; }
+  .ticket.torn .main { border-radius: 14px 14px 0 0; }
+}
+@media (prefers-reduced-motion: reduce) { .ticket.torn .stub { visibility: hidden; } .ticket.torn .stamp { opacity: 1; } }
+.ticket .stub img { width: 88px; margin: 0 auto; }
+.ticket .stub .seat { font: 400 2.2rem/1 var(--num); color: #1c1a16; }
+.ticket .stub .bars { height: 40px; background: repeating-linear-gradient(90deg, #1c1a16 0 2px, transparent 2px 4px, #1c1a16 4px 5px, transparent 5px 8px, #1c1a16 8px 11px, transparent 11px 13px); }
+@media (max-width: 680px) { .ticket .stub { border-left: 0; border-top: 2px dashed #b8af98; border-radius: 0 0 14px 14px; grid-template-columns: auto 1fr auto; align-items: center; text-align: left; } .ticket .stub img { width: 60px; } .ticket .stub .bars { width: 70px; } }
+.get { display: grid; gap: 40px; }
+.after { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: clamp(24px, 5vw, 60px); }
+@media (max-width: 900px) { .after { grid-template-columns: 1fr; } }
+.steps-list { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; color: var(--mute); }
+.steps-list b { color: var(--ink); font-weight: 600; }
+.req-wrap { overflow-x: auto; }
+table.req { width: 100%; border-collapse: collapse; min-width: 520px; font-size: 0.98rem; }
+table.req th, table.req td { text-align: left; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.req thead th { font: 600 0.78rem/1 var(--label); letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+table.req tbody th { font: 600 0.9rem/1.3 var(--label); letter-spacing: 0.1em; text-transform: uppercase; color: var(--mute); }
+
+/* credits: the team sheet */
+.sheet { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; }
+@media (max-width: 760px) { .sheet { grid-template-columns: 1fr; } }
+.sheet .row { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; padding: 16px 0; border-top: 1px solid var(--line); }
+.sheet .no { font: 400 1.9rem/1 var(--num); color: var(--accent); text-align: right; }
+.sheet .what { font: 700 1.05rem/1.2 var(--label); letter-spacing: 0.06em; text-transform: uppercase; }
+.sheet .who { color: var(--mute); font-size: 0.98rem; margin-top: 4px; }
+footer { padding-block: 34px 44px; border-top: 1px solid var(--line); color: var(--mute); font-size: 0.92rem; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: center; }
+footer img { width: 28px; height: 28px; }
+</style>
+
+<header class="bar">
+  <div class="wrap">
+    <img class="crest" src="img/crest.png" alt="" width="34" height="34">
+    <span class="name">Kick Off</span>
+    <div class="kit-switch" role="group" aria-label="Kit">
+      <button type="button" data-kit="home" aria-pressed="true"><i style="background:#ffd21a"></i>Home</button>
+      <button type="button" data-kit="away" aria-pressed="false"><i style="background:#e0222b"></i>Away</button>
+    </div>
+    <nav aria-label="Sections">
+      <a href="#story">The match</a>
+      <a href="#pens">Penalties</a>
+      <a href="#controls">Controls</a>
+      <a href="#download">Download</a>
+    </nav>
+    <div class="scorebug" aria-label="Match clock follows your scroll">
+      <span class="clock" id="bug-clock">0'</span>
+      <span class="teams"><span>PKF</span><b id="bug-score">0–0</b><span>CRA</span></span>
+    </div>
+  </div>
+  <div class="timeline" id="timeline" aria-hidden="true"><i></i></div>
+</header>
+
+<main>
+  <section class="picker" aria-labelledby="pick-title">
+    <div class="center">
+      <h1 id="pick-title"><img src="img/logo.png" alt="Kick Off Football" width="900" height="406"></h1>
+      <div class="pick-copy">
+        <span class="pick">Pick your kit</span>
+        <p>Eleven-a-side football on a full-size pitch. Choose a look for the site, then scroll from kick-off to full time.</p>
+      </div>
+    </div>
+    <div class="half half-home">
+      <div class="bgimg" aria-hidden="true"></div>
+      <div class="inner">
+        <span class="tagline">Home kit</span>
+        <h2 class="word">Match<br>day</h2>
+        <p>Fresh-cut grass, chalk lines and a yellow card in the referee's pocket.</p>
+        <div class="actions"><button type="button" class="choose hop" data-kit="home">Wear home</button><span class="worn">You're wearing this kit</span></div>
+      </div>
+    </div>
+    <div class="half half-away">
+      <div class="bgimg" aria-hidden="true"></div>
+      <div class="inner">
+        <span class="tagline">Away kit</span>
+        <h2 class="word">Night<br>match</h2>
+        <p>Under the floodlights, with the red card ready.</p>
+        <div class="actions"><button type="button" class="choose hop" data-kit="away">Wear away</button><span class="worn">You're wearing this kit</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band mark-circle" id="story" aria-labelledby="story-title">
+    <div class="wrap">
+      <div class="head">
+        <span class="tag">The match</span>
+        <h2 id="story-title">Ninety minutes, in five moments</h2>
+        <p class="lede">Eleven-a-side football on a full-size pitch, against the computer or a friend on the same screen. Scroll from kick-off to full time.</p>
+      </div>
+      <div class="story">
+        <div class="stage" aria-hidden="true">
+          <img src="img/stadium.jpg" alt="" class="on" data-step="0">
+          <img src="img/duel.jpg" alt="" data-step="1">
+          <img src="img/dribble.jpg" alt="" data-step="2">
+          <img src="img/goal.jpg" alt="" data-step="3">
+          <img src="img/home-menu.jpg" alt="" data-step="4">
+          <span class="minute" id="stage-minute">1'</span>
+          <span class="cap" id="stage-cap">The tunnel</span>
+        </div>
+        <div class="steps">
+          <article class="step on" data-minute="1" data-cap="The tunnel">
+            <span class="m">1'</span>
+            <h3>Walk out into a full house</h3>
+            <p>A closed bowl with a two-tier main stand, big screens with the live score and about 30,000 fans in club colours, who stand and roar when you score.</p>
+            <img class="inline-img" src="img/stadium.jpg" alt="The stadium from the stands, with the big screen showing the score" loading="lazy" width="1600" height="900">
+          </article>
+          <article class="step" data-minute="12" data-cap="The squad">
+            <span class="m">12'</span>
+            <h3>Eleven a side, full size</h3>
+            <p>Two full teams on a 105 × 68 m pitch, two halves with ends changed, stamina that drains when you sprint, and five substitutions from the pause menu.</p>
+            <img class="inline-img" src="img/duel.jpg" alt="Two players from opposite teams jogging side by side" loading="lazy" width="1600" height="900">
+          </article>
+          <article class="step" data-minute="34" data-cap="On the ball">
+            <span class="m">34'</span>
+            <h3>Take your man on</h3>
+            <p>Skill moves on one button: a rainbow flick (a nutmeg if he's tight), step-overs, ball rolls and roulettes. Shield it, close-control it, or knock it past him with an effort touch.</p>
+            <img class="inline-img" src="img/dribble.jpg" alt="A player dribbling the ball past a defender" loading="lazy" width="1600" height="900">
+          </article>
+          <article class="step" data-minute="67" data-cap="The finish">
+            <span class="m">67'</span>
+            <h3>Pick your finish</h3>
+            <p>Finesse, chip, power or low driven. Tap shoot again just before the strike for a timed finish, or fake the shot and walk it round the keeper.</p>
+            <img class="inline-img" src="img/goal.jpg" alt="The goal and net in front of the home end" loading="lazy" width="1600" height="900">
+          </article>
+          <article class="step" data-minute="90" data-cap="Full time">
+            <span class="m">90'</span>
+            <h3>Pick your team sheet</h3>
+            <p>Choose a formation, play style, opponent and starting XI. Play the computer, a friend on the same screen, or watch the computer play both sides.</p>
+            <img class="inline-img" src="img/home-menu.jpg" alt="The home menu with the next match and the line-up" loading="lazy" width="1600" height="900">
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ribbon" aria-label="Kick Off: 11 v 11, free for Windows, play the computer or a friend">
+    <div class="track" aria-hidden="true">
+      <span>Kick Off</span><span>11 v 11</span><span>Free for Windows</span><span>Local 1v1</span><span>Timed finishing</span><span>30,000 fans</span><span>No account needed</span>
+      <span>Kick Off</span><span>11 v 11</span><span>Free for Windows</span><span>Local 1v1</span><span>Timed finishing</span><span>30,000 fans</span><span>No account needed</span>
+    </div>
+  </div>
+
+  <section class="band" aria-labelledby="stats-title">
+    <div class="wrap">
+      <div class="head">
+        <span class="tag">Scoreboard</span>
+        <h2 id="stats-title">By the numbers</h2>
+      </div>
+      <div class="stats" id="stats">
+        <div class="stat"><div class="odo" data-value="22"></div><span class="lab">Players on the pitch</span></div>
+        <div class="stat"><div class="odo" data-value="30,000"></div><span class="lab">Fans in the stands</span></div>
+        <div class="stat"><div class="odo" data-value="105"></div><span class="lab">Metres, goal to goal</span></div>
+        <div class="stat"><div class="odo" data-value="23"></div><span class="lab">PlayStyles</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="watch-title">
+    <div class="wrap watch">
+      <div class="head" style="margin:0">
+        <span class="tag">Watch</span>
+        <h2 id="watch-title">Trailer</h2>
+        <p class="lede">Thirty seconds of the ground, the players and the home end, cut from in-game screenshots.</p>
+      </div>
+      <figure class="trailer" aria-label="Trailer: a montage of in-game screenshots">
+        <canvas id="trailer" width="1280" height="720"></canvas>
+        <div class="ctrl"><button type="button" id="trailer-play" aria-pressed="false">Play</button><span class="small" id="trailer-time" aria-hidden="true">0:00 / 0:00</span></div>
+        <div class="prog" aria-hidden="true"><i id="trailer-bar"></i></div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="band mark-box" id="pens" aria-labelledby="pens-title">
+    <div class="wrap shootout">
+      <div class="pens-board">
+        <span class="tag">Try it</span>
+        <h2 id="pens-title">Penalty shootout</h2>
+        <p class="lede">Five kicks. Aim inside the goal and shoot. The keeper guesses a side, so the corners are your friend.</p>
+        <div class="kicks" id="kicks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <div><span class="pens-score" id="pens-score">0 / 5</span> <span class="small" id="pens-best"></span></div>
+        <p class="small kbd-hint">Click or tap to shoot. Keyboard: <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd> to aim, <kbd>Space</kbd> to shoot.</p>
+        <div><button type="button" class="btn btn-ghost" id="pens-again" hidden>Take five more</button></div>
+        <p class="small" id="pens-live" aria-live="polite"></p>
+      </div>
+      <canvas class="pitch-canvas" id="pens-canvas" width="960" height="540" tabindex="0" aria-label="Penalty shootout. Use the arrow keys to aim and Space to shoot."></canvas>
+    </div>
+  </section>
+
+  <section class="band" id="ground" aria-labelledby="ground-title">
+    <div class="wrap">
+      <div class="head">
+        <span class="tag">The ground</span>
+        <h2 id="ground-title">Screenshots</h2>
+        <p class="lede">Captured in the game. Select a picture to see it full size.</p>
+      </div>
+      <div class="gallery" id="gallery">
+        <figure class="g-wide"><button type="button" data-full="img/behind-goal.jpg"><img src="img/behind-goal.jpg" alt="View from behind the goal across the pitch to the packed main stand and the big screen" loading="lazy" width="1600" height="900"></button><figcaption>From behind the goal</figcaption></figure>
+        <figure class="g-tall"><button type="button" data-full="img/face.jpg"><img src="img/face.jpg" alt="Close-up of a player's face and hair" loading="lazy" width="1600" height="900" style="object-position:62% 50%"></button><figcaption>Players up close</figcaption></figure>
+        <figure class="g-third"><button type="button" data-full="img/broadcast.jpg"><img src="img/broadcast.jpg" alt="Broadcast camera view of play in midfield with the scorebug and radar" loading="lazy" width="1600" height="900"></button><figcaption>Broadcast camera</figcaption></figure>
+        <figure class="g-third"><button type="button" data-full="img/keeper.jpg"><img src="img/keeper.jpg" alt="The goalkeeper in green in front of his net" loading="lazy" width="1600" height="900"></button><figcaption>The keeper</figcaption></figure>
+        <figure class="g-third"><button type="button" data-full="img/run.jpg"><img src="img/run.jpg" alt="A player running along the touchline in front of the advertising boards" loading="lazy" width="1600" height="900"></button><figcaption>Down the line</figcaption></figure>
+      </div>
+      <p class="small" style="margin-top:16px">Some pictures come from the current development build, so faces and hair look a little different from version 1.4.</p>
+    </div>
+  </section>
+
+  <section class="band" id="controls" aria-labelledby="controls-title">
+    <div class="wrap">
+      <div class="head">
+        <span class="tag">How to play</span>
+        <h2 id="controls-title">Controls</h2>
+        <p class="lede">Keyboard or any Xbox-style gamepad. Every key can be changed in Settings; these are the defaults.</p>
+      </div>
+      <div class="controls-grid">
+        <div class="ctl">
+          <h3>Moving</h3>
+          <table>
+            <thead><tr><th scope="col">Action</th><th scope="col">Keys</th><th scope="col">Pad</th></tr></thead>
+            <tbody>
+              <tr><td>Move</td><td><kbd>WASD</kbd> / <kbd>Arrows</kbd></td><td><span class="pad">Left stick</span></td></tr>
+              <tr><td>Sprint</td><td><kbd>Left Shift</kbd></td><td><span class="pad">RT</span></td></tr>
+              <tr><td>Controlled sprint</td><td><kbd>R</kbd> hold</td><td><span class="pad">RB</span></td></tr>
+              <tr><td>Jockey, shield, close control</td><td><kbd>Left Ctrl</kbd></td><td><span class="pad">LT</span></td></tr>
+              <tr><td>Effort touch</td><td><kbd>F</kbd> + dir</td><td><span class="pad">R3</span></td></tr>
+              <tr><td>Skill move</td><td><kbd>B</kbd> + dir</td><td><span class="pad">Right stick</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ctl">
+          <h3>Attacking</h3>
+          <table>
+            <thead><tr><th scope="col">Action</th><th scope="col">Keys</th><th scope="col">Pad</th></tr></thead>
+            <tbody>
+              <tr><td>Pass</td><td><kbd>J</kbd> / <kbd>Space</kbd></td><td><span class="pad">A</span></td></tr>
+              <tr><td>Through ball</td><td><kbd>L</kbd></td><td><span class="pad">Y</span></td></tr>
+              <tr><td>Lob / cross</td><td><kbd>I</kbd></td><td><span class="pad">X</span></td></tr>
+              <tr><td>Shoot (hold, release)</td><td><kbd>K</kbd></td><td><span class="pad">B</span></td></tr>
+              <tr><td>Finesse / chip / power / low</td><td><kbd>R</kbd> <kbd>Z</kbd><br><kbd>R+Z</kbd> <kbd>Ctrl</kbd></td><td><span class="pad">RB</span> <span class="pad">LB</span><br><span class="pad">RB+LB</span> <span class="pad">LT</span></td></tr>
+              <tr><td>Send a run, one-two</td><td><kbd>Z</kbd></td><td><span class="pad">LB</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ctl">
+          <h3>Defending</h3>
+          <table>
+            <thead><tr><th scope="col">Action</th><th scope="col">Keys</th><th scope="col">Pad</th></tr></thead>
+            <tbody>
+              <tr><td>Standing tackle</td><td><kbd>E</kbd></td><td><span class="pad">B</span></td></tr>
+              <tr><td>Slide tackle</td><td><kbd>C</kbd></td><td><span class="pad">X</span></td></tr>
+              <tr><td>Switch player</td><td><kbd>Q</kbd></td><td><span class="pad">LB</span></td></tr>
+              <tr><td>Shoulder barge</td><td><kbd>X</kbd></td><td><span class="pad">A</span></td></tr>
+              <tr><td>Teammate press</td><td><kbd>R</kbd> hold</td><td><span class="pad">RB</span></td></tr>
+              <tr><td>Keeper rush</td><td><kbd>L</kbd> hold</td><td><span class="pad">Y</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="tips">
+        <p><b>Timed finishing:</b> press shoot again just before the strike. Pass while the shot charges for a fake shot.</p>
+        <p><b>In a match:</b> <kbd>Esc</kbd> / <kbd>P</kbd> pauses and opens substitutions, <kbd>1</kbd>–<kbd>5</kbd> change the team style, <kbd>9</kbd> / <kbd>0</kbd> the game plan, <kbd>H</kbd> hides the help and <kbd>N</kbd> shows shirt numbers.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band mark-corner" id="download" aria-labelledby="download-title">
+    <div class="wrap get">
+      <div class="head" style="margin:0">
+        <span class="tag">Get the game</span>
+        <h2 id="download-title">Your ticket</h2>
+      </div>
+      <div class="ticket">
+        <div class="main">
+          <span class="admit">Admit one · Prototype build</span>
+          <h3>Kick Off <em>1.4</em><br>for Windows</h3>
+          <dl>
+            <div><dt>Download</dt><dd>1.5 GB zip</dd></div>
+            <div><dt>Unzipped</dt><dd>1.8 GB</dd></div>
+            <div><dt>System</dt><dd>Windows 10 / 11</dd></div>
+            <div><dt>Price</dt><dd>Free</dd></div>
+          </dl>
+          <a class="btn btn-main hop dl-btn" id="dl-main" href="#download">Download for Windows</a>
+          <p class="note" id="dl-note">Tear off the stub, or press the button, to get the game.</p>
+          <button type="button" class="again" id="dl-again" hidden>Print a new ticket</button>
+          <div class="stamp" aria-hidden="true">Admitted<small>Enjoy the match</small></div>
+        </div>
+        <a class="stub dl-btn" id="dl-stub" href="#download" aria-label="Tear off the stub to download Kick Off for Windows">
+          <span class="tear-hint" aria-hidden="true">✂ Tear here</span>
+          <img src="img/crest.png" alt="" width="88" height="88">
+          <div aria-hidden="true"><div>Gate</div><div class="seat">KO</div><div>Row 1 · Seat 4</div></div>
+          <div class="bars" aria-hidden="true"></div>
+        </a>
+      </div>
+      <div class="after">
+        <div>
+          <h3 style="margin-bottom:14px">Install</h3>
+          <ol class="steps-list">
+            <li><b>Unzip</b> the whole folder anywhere and keep the files together.</li>
+            <li><b>Double-click PitchKings.exe.</b> There is no installer, account or internet connection.</li>
+            <li>If Windows says <b>MSVCP140.dll</b> is missing, run <b>Engine\Extras\Redist\en-us\vc_redist.x64.exe</b> once.</li>
+            <li>If SmartScreen shows "Windows protected your PC", choose <b>More info</b>, then <b>Run anyway</b>. The game is not code-signed.</li>
+          </ol>
+        </div>
+        <div>
+          <h3 style="margin-bottom:14px">System requirements</h3>
+          <div class="req-wrap">
+            <table class="req">
+              <thead><tr><th scope="col"></th><th scope="col">Minimum</th><th scope="col">Recommended</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">OS</th><td>Windows 10 64-bit</td><td>Windows 10 / 11 64-bit</td></tr>
+                <tr><th scope="row">CPU</th><td>4 cores (Core i5 6th gen, Ryzen 3 1200)</td><td>6+ cores (Core i5 10th gen, Ryzen 5 3600)</td></tr>
+                <tr><th scope="row">Memory</th><td>4 GB</td><td>8 GB</td></tr>
+                <tr><th scope="row">Graphics</th><td>DirectX 12, 2 GB VRAM (GTX 1050 Ti, RX 570)</td><td>4 GB+ VRAM (GTX 1660, RTX 2060, RX 5600 XT)</td></tr>
+                <tr><th scope="row">Storage</th><td>2 GB free</td><td>SSD for faster loading</td></tr>
+                <tr><th scope="row">Input</th><td colspan="2">Keyboard or any XInput gamepad. Local 1v1 needs two devices.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="small" style="margin-top:14px">Tested on an RTX 4070 laptop GPU; the minimum spec is an estimate.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="credits" aria-labelledby="credits-title">
+    <div class="wrap">
+      <div class="head">
+        <span class="tag">Team sheet</span>
+        <h2 id="credits-title">Credits</h2>
+        <p class="lede">All clubs and players in the game are fictional.</p>
+      </div>
+      <div class="sheet">
+        <div class="row"><span class="no">1</span><div><div class="what">Engine</div><div class="who">Made with Unreal Engine 5.8 by Epic Games.</div></div></div>
+        <div class="row"><span class="no">2</span><div><div class="what">Football boots</div><div class="who">"Vrfs boots" by <a href="https://sketchfab.com/zanman730">zanman730</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC Attribution 4.0</a>. Recoloured and refitted. <a href="https://sketchfab.com/3d-models/vrfs-boots-b613346d117d49ad84073ac734396ece">Original model</a></div></div></div>
+        <div class="row"><span class="no">3</span><div><div class="what">Players and crowd</div><div class="who">Heads, clothing and fans from City Sample Crowds by Epic Games (Fab). Newer player faces made with MetaHuman Creator by Epic Games.</div></div></div>
+        <div class="row"><span class="no">4</span><div><div class="what">City skyline</div><div class="who">"Homecoming Center Rooftop" panorama from <a href="https://polyhaven.com">Poly Haven</a>, CC0.</div></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="img/crest.png" alt="" width="28" height="28">
+    <span>Kick Off · prototype build 1.4</span>
+    <span>Not affiliated with any real club, league or player.</span>
+  </div>
+</footer>
+
+<dialog class="lightbox" id="lightbox" aria-label="Screenshot">
+  <img id="lightbox-img" src="" alt="">
+  <div class="row"><p id="lightbox-cap"></p><button type="button" class="btn btn-ghost" id="lightbox-close">Close</button></div>
+</dialog>
+
+<script>
+// Where the Windows zip is hosted (itch.io or GitHub Releases page). Empty until it is uploaded.
+const DOWNLOAD_URL = "";
+const REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+};
+
+// letters that hop on hover
+document.querySelectorAll(".hop").forEach((el) => {
+  const text = el.textContent;
+  el.setAttribute("aria-label", text);
+  el.textContent = "";
+  for (const ch of text) {
+    const s = document.createElement("span");
+    s.textContent = ch === " " ? " " : ch;
+    s.setAttribute("aria-hidden", "true");
+    el.appendChild(s);
+  }
+});
+
+// kit: the two looks
+(function kit() {
+  const root = document.documentElement;
+  function wear(k, scroll) {
+    if (k === "away") root.setAttribute("data-kit", "away"); else root.removeAttribute("data-kit");
+    document.querySelectorAll(".kit-switch button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.kit === k)));
+    store.set("ko-kit", k);
+    if (scroll) document.getElementById("story").scrollIntoView({ behavior: REDUCE ? "auto" : "smooth" });
+    if (window.__pensDraw) window.__pensDraw();
+  }
+  wear(store.get("ko-kit") === "away" ? "away" : "home", false);
+  document.querySelectorAll(".kit-switch button").forEach((b) => b.addEventListener("click", () => wear(b.dataset.kit, false)));
+  document.querySelectorAll(".choose").forEach((b) => b.addEventListener("click", () => wear(b.dataset.kit, true)));
+})();
+
+// the match clock and timeline follow the scroll, 0' at the top, 90' at the bottom
+(function clock() {
+  const bug = document.getElementById("bug-clock");
+  const line = document.getElementById("timeline");
+  const fill = line.querySelector("i");
+  [1, 12, 34, 67, 90].forEach((m) => { const b = document.createElement("b"); const pct = m / 90 * 100; b.style.left = pct + "%"; b.style.transform = "translateX(-" + pct + "%)"; b.dataset.m = m; line.appendChild(b); });
+  function tick() {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const p = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+    const m = Math.round(p * 90);
+    bug.textContent = m >= 90 ? "FT" : (m === 45 ? "HT" : m + "'");
+    fill.style.width = (p * 100) + "%";
+    line.querySelectorAll("b").forEach((b) => b.classList.toggle("on", m >= +b.dataset.m));
+  }
+  addEventListener("scroll", tick, { passive: true });
+  addEventListener("resize", tick);
+  tick();
+})();
+
+// story: the stage follows the step in the middle of the screen
+(function story() {
+  const steps = [...document.querySelectorAll(".step")];
+  const imgs = [...document.querySelectorAll(".stage img")];
+  const minute = document.getElementById("stage-minute");
+  const cap = document.getElementById("stage-cap");
+  if (!("IntersectionObserver" in window)) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const i = steps.indexOf(e.target);
+      steps.forEach((s, k) => s.classList.toggle("on", k === i));
+      imgs.forEach((im, k) => im.classList.toggle("on", k === i));
+      minute.textContent = e.target.dataset.minute + "'";
+      cap.textContent = e.target.dataset.cap;
+    });
+  }, { rootMargin: "-45% 0px -45% 0px" });
+  steps.forEach((s) => io.observe(s));
+})();
+
+// scoreboard digits: shown at their value, then roll one full turn when they come into view
+(function odometers() {
+  document.querySelectorAll(".odo").forEach((el) => {
+    const v = el.dataset.value;
+    el.setAttribute("aria-label", v);
+    for (const ch of v) {
+      if (!/\d/.test(ch)) { const s = document.createElement("span"); s.className = "sep"; s.textContent = ch; s.setAttribute("aria-hidden", "true"); el.appendChild(s); continue; }
+      const col = document.createElement("span");
+      col.className = "col";
+      col.setAttribute("aria-hidden", "true");
+      for (let k = 0; k < 20; k++) { const d = document.createElement("span"); d.textContent = k % 10; col.appendChild(d); }
+      col.dataset.d = ch;
+      col.style.transition = "none";
+      col.style.transform = "translateY(-" + (+ch) + "em)";
+      el.appendChild(col);
+    }
+  });
+  if (REDUCE || !("IntersectionObserver" in window)) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      e.target.querySelectorAll(".col").forEach((col, i) => {
+        requestAnimationFrame(() => {
+          col.style.transition = "";
+          col.style.transitionDelay = (i * 0.08) + "s";
+          col.style.transform = "translateY(-" + (10 + (+col.dataset.d)) + "em)";
+        });
+      });
+    });
+  }, { threshold: 0.6 });
+  document.querySelectorAll(".odo").forEach((el) => io.observe(el));
+})();
+
+// the ticket: tearing off the stub (or pressing the button) starts the download. The download page opens from the
+// click itself, in a new tab; the tear plays alongside it.
+(function ticket() {
+  const ticket = document.querySelector(".ticket");
+  const note = document.getElementById("dl-note");
+  const again = document.getElementById("dl-again");
+  const links = [...document.querySelectorAll(".ticket .dl-btn")];
+  // a ragged clip for the stub's torn edge (left on wide screens, top when the stub sits below)
+  function tearClip() {
+    const pts = [], n = 22, narrow = matchMedia("(max-width: 680px)").matches;
+    for (let i = 0; i <= n; i++) {
+      const t = (i / n) * 100, j = (i % 2 ? 7 : 1) + (i * 37 % 5) * 0.6;
+      pts.push(narrow ? t + "% " + j + "px" : j + "px " + t + "%");
+    }
+    const rest = narrow ? ["100% 100%", "0% 100%"] : ["100% 100%", "100% 0%"];
+    ticket.style.setProperty("--tear-clip", "polygon(" + (narrow ? pts.concat(rest) : [pts[0]].concat(rest.reverse(), pts.slice().reverse())).join(", ") + ")");
+  }
+  links.forEach((a) => {
+    if (DOWNLOAD_URL) { a.href = DOWNLOAD_URL; a.target = "_blank"; a.rel = "noopener"; }
+    a.addEventListener("click", (e) => {
+      if (!DOWNLOAD_URL) e.preventDefault();          // nothing to open yet: just tear
+      if (ticket.classList.contains("torn")) return;
+      tearClip();
+      ticket.classList.add("torn");
+      note.textContent = DOWNLOAD_URL
+        ? "Ticket torn. The download page opened in a new tab: grab the zip there."
+        : "Ticket torn. The download link isn't live yet: the zip is still being uploaded.";
+      setTimeout(() => { again.hidden = false; }, REDUCE ? 0 : 1300);
+    });
+  });
+  again.addEventListener("click", () => {
+    ticket.classList.remove("torn");
+    again.hidden = true;
+    note.textContent = "Tear off the stub, or press the button, to get the game.";
+    document.getElementById("dl-stub").focus();
+  });
+})();
+
+// gallery lightbox
+(function gallery() {
+  const dlg = document.getElementById("lightbox");
+  const img = document.getElementById("lightbox-img");
+  const cap = document.getElementById("lightbox-cap");
+  document.querySelectorAll("#gallery button").forEach((b) => {
+    b.addEventListener("click", () => {
+      const thumb = b.querySelector("img");
+      img.src = b.dataset.full; img.alt = thumb.alt;
+      cap.textContent = b.parentElement.querySelector("figcaption").textContent;
+      if (dlg.showModal) dlg.showModal();
+    });
+  });
+  document.getElementById("lightbox-close").addEventListener("click", () => dlg.close());
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
+})();
+
+// trailer: slow pushes across stills with title cards
+(function trailer() {
+  const canvas = document.getElementById("trailer");
+  const ctx = canvas.getContext("2d");
+  const btn = document.getElementById("trailer-play");
+  const bar = document.getElementById("trailer-bar");
+  const time = document.getElementById("trailer-time");
+  const W = canvas.width, H = canvas.height, SHOT = 4.2, FADE = 0.9;
+  const shots = [
+    { src: "img/stadium.jpg", title: "Matchday", sub: "Kick Off Football", a: [1.18, 0.5, 0.42], b: [1.04, 0.5, 0.5] },
+    { src: "img/behind-goal.jpg", title: "A full house", sub: "About 30,000 fans in club colours", a: [1.0, 0.5, 0.5], b: [1.15, 0.55, 0.42] },
+    { src: "img/duel.jpg", title: "11 v 11", sub: "On a full-size 105 x 68 m pitch", a: [1.2, 0.48, 0.38], b: [1.06, 0.5, 0.45] },
+    { src: "img/dribble.jpg", title: "Take them on", sub: "Rainbows, step-overs, roulettes", a: [1.05, 0.4, 0.5], b: [1.22, 0.38, 0.6] },
+    { src: "img/broadcast.jpg", title: "Play it your way", sub: "Through balls, one-twos, timed finishes", a: [1.22, 0.45, 0.5], b: [1.04, 0.5, 0.5] },
+    { src: "img/keeper.jpg", title: "Last line", sub: "Keepers who come for it", a: [1.04, 0.5, 0.45], b: [1.2, 0.52, 0.38] },
+    { src: "img/goal.jpg", title: "Kick off", sub: "Free for Windows", a: [1.0, 0.5, 0.5], b: [1.14, 0.62, 0.48] },
+  ];
+  const TOTAL = shots.length * SHOT;
+  let t = 1.6, playing = false, last = 0, seen = false;
+  const fmt = (s) => Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0");
+  const ease = (x) => x * x * (3 - 2 * x);
+  const accent = () => getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#ffd21a";
+  const images = shots.map((s) => { const im = new Image(); im.onload = render; im.src = s.src; return im; });
+  function drawImage(i, k, alpha) {
+    const s = shots[i], im = images[i];
+    if (!im.complete || !im.naturalWidth) return;
+    const e = ease(Math.min(1, Math.max(0, k)));
+    const z = s.a[0] + (s.b[0] - s.a[0]) * e, cx = s.a[1] + (s.b[1] - s.a[1]) * e, cy = s.a[2] + (s.b[2] - s.a[2]) * e;
+    const sw = im.naturalWidth / z, sh = im.naturalHeight / z;
+    const sx = Math.min(Math.max(0, cx * im.naturalWidth - sw / 2), im.naturalWidth - sw);
+    const sy = Math.min(Math.max(0, cy * im.naturalHeight - sh / 2), im.naturalHeight - sh);
+    ctx.globalAlpha = alpha; ctx.drawImage(im, sx, sy, sw, sh, 0, 0, W, H); ctx.globalAlpha = 1;
+  }
+  function drawTitle(i, k) {
+    const s = shots[i];
+    const a = Math.min(Math.min(1, Math.max(0, (k * SHOT - 0.5) / 0.6)), Math.min(1, Math.max(0, (SHOT - k * SHOT - 0.3) / 0.5)));
+    if (a <= 0) return;
+    const g = ctx.createLinearGradient(0, H * 0.55, 0, H);
+    g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0," + 0.75 * a + ")");
+    ctx.fillStyle = g; ctx.fillRect(0, H * 0.55, W, H * 0.45);
+    ctx.globalAlpha = a;
+    ctx.fillStyle = accent(); ctx.fillRect(56, H - 168, 64, 6);
+    ctx.fillStyle = "#ffffff"; ctx.font = 'italic 900 80px "Kanit", Impact, sans-serif'; ctx.fillText(s.title.toUpperCase(), 52, H - 80);
+    ctx.font = '700 30px "Saira Condensed", "Arial Narrow", sans-serif'; ctx.fillStyle = "#e4eee4"; ctx.fillText(s.sub.toUpperCase(), 56, H - 38);
+    ctx.globalAlpha = 1;
+  }
+  function render() {
+    ctx.fillStyle = "#000"; ctx.fillRect(0, 0, W, H);
+    const i = Math.min(shots.length - 1, Math.floor(t / SHOT)), local = t - i * SHOT;
+    drawImage(i, local / SHOT, 1);
+    if (local > SHOT - FADE) drawImage((i + 1) % shots.length, (local - SHOT) / SHOT, (local - (SHOT - FADE)) / FADE);
+    drawTitle(i, local / SHOT);
+    bar.style.width = (100 * t / TOTAL) + "%";
+    time.textContent = fmt(t) + " / " + fmt(TOTAL);
+  }
+  function frame(now) { if (!playing) return; t = (t + Math.min(0.1, (now - last) / 1000)) % TOTAL; last = now; render(); requestAnimationFrame(frame); }
+  function setPlaying(p) { playing = p; btn.textContent = p ? "Pause" : "Play"; btn.setAttribute("aria-pressed", String(p)); if (p) { last = performance.now(); requestAnimationFrame(frame); } }
+  btn.addEventListener("click", () => setPlaying(!playing));
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(render);
+  render();
+  // starts by itself the first time it scrolls into view
+  if (!REDUCE && "IntersectionObserver" in window) {
+    new IntersectionObserver((es, io) => { if (es[0].isIntersecting && !seen) { seen = true; io.disconnect(); setPlaying(true); } }, { threshold: 0.5 }).observe(canvas);
+  }
+})();
+
+// penalty shootout
+(function pens() {
+  const cv = document.getElementById("pens-canvas");
+  const ctx = cv.getContext("2d");
+  const W = cv.width, H = cv.height;
+  const GOAL = { x0: 230, x1: 730, top: 120, bottom: 372 };
+  const SPOT = { x: 480, y: 492 };
+  const kicksEl = [...document.querySelectorAll("#kicks i")];
+  const scoreEl = document.getElementById("pens-score");
+  const bestEl = document.getElementById("pens-best");
+  const live = document.getElementById("pens-live");
+  const again = document.getElementById("pens-again");
+  let aim = { x: 480, y: 230 }, results = [], phase = "aim", anim = null, message = "", msgT = 0;
+  let best = +(store.get("ko-pens-best") || 0);
+  const css = (n, f) => getComputedStyle(document.documentElement).getPropertyValue(n).trim() || f;
+  function showBest() { bestEl.textContent = best ? "Best: " + best + " / 5" : ""; }
+  showBest();
+
+  function drawScene(ball, keeper) {
+    // stands and the pitch
+    const sky = ctx.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0, "#0c1014"); sky.addColorStop(0.42, "#1b2229");  // the stand behind the goal
+    sky.addColorStop(0.42, "#2f6d38"); sky.addColorStop(1, "#24572c");
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
+    for (let r = 0; r < 6; r++) { ctx.fillStyle = r % 2 ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.05)"; ctx.fillRect(0, 226 + r * 54, W, 54); }
+    // crowd dots behind the goal
+    ctx.fillStyle = "rgba(255,255,255,0.08)";
+    for (let y = 18; y < 210; y += 14) for (let x = (y % 28 ? 6 : 13); x < W; x += 14) ctx.fillRect(x, y, 4, 5);
+    // six-yard line and spot
+    ctx.strokeStyle = "rgba(255,255,255,0.85)"; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(0, GOAL.bottom); ctx.lineTo(W, GOAL.bottom); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(150, GOAL.bottom); ctx.lineTo(110, 452); ctx.lineTo(850, 452); ctx.lineTo(810, GOAL.bottom); ctx.stroke();
+    ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.ellipse(SPOT.x, SPOT.y + 10, 7, 3, 0, 0, 7); ctx.fill();
+    // net
+    ctx.fillStyle = "rgba(255,255,255,0.06)"; ctx.fillRect(GOAL.x0, GOAL.top, GOAL.x1 - GOAL.x0, GOAL.bottom - GOAL.top);
+    ctx.strokeStyle = "rgba(255,255,255,0.18)"; ctx.lineWidth = 1;
+    for (let x = GOAL.x0; x <= GOAL.x1; x += 16) { ctx.beginPath(); ctx.moveTo(x, GOAL.top); ctx.lineTo(x, GOAL.bottom); ctx.stroke(); }
+    for (let y = GOAL.top; y <= GOAL.bottom; y += 16) { ctx.beginPath(); ctx.moveTo(GOAL.x0, y); ctx.lineTo(GOAL.x1, y); ctx.stroke(); }
+    // keeper
+    drawKeeper(keeper);
+    // posts and bar
+    ctx.strokeStyle = "#f4f6fa"; ctx.lineWidth = 9; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(GOAL.x0, GOAL.bottom); ctx.lineTo(GOAL.x0, GOAL.top); ctx.lineTo(GOAL.x1, GOAL.top); ctx.lineTo(GOAL.x1, GOAL.bottom); ctx.stroke();
+    // ball
+    const r = ball.r;
+    ctx.fillStyle = "rgba(0,0,0,0.25)"; ctx.beginPath(); ctx.ellipse(ball.x, ball.gy + 2, r * 1.1, r * 0.35, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(ball.x, ball.y, r, 0, 7); ctx.fill();
+    ctx.fillStyle = "#1c1c1c"; ctx.beginPath(); ctx.arc(ball.x, ball.y, r * 0.38, 0, 7); ctx.fill();
+  }
+  function drawKeeper(k) {
+    ctx.save();
+    ctx.translate(k.x, GOAL.bottom - 4 - k.lift);
+    ctx.rotate(k.rot);
+    const kit = "#2fae4f";
+    ctx.fillStyle = "#151515"; ctx.fillRect(-18, -58, 14, 58); ctx.fillRect(4, -58, 14, 58);   // legs
+    ctx.fillStyle = kit; ctx.fillRect(-26, -128, 52, 72);                                         // shirt
+    ctx.fillStyle = "#0e0e0e"; ctx.fillRect(-24, -62, 48, 14);                                    // shorts
+    ctx.fillStyle = kit;                                                                           // arms up and out
+    ctx.save(); ctx.translate(-24, -122); ctx.rotate(-0.9 - k.reach); ctx.fillRect(-48, -7, 50, 14); ctx.fillStyle = "#f2f2f2"; ctx.fillRect(-60, -10, 16, 20); ctx.restore();
+    ctx.save(); ctx.translate(24, -122); ctx.rotate(0.9 + k.reach); ctx.fillRect(-2, -7, 50, 14); ctx.fillStyle = "#f2f2f2"; ctx.fillRect(44, -10, 16, 20); ctx.restore();
+    ctx.fillStyle = "#6b4a34"; ctx.beginPath(); ctx.arc(0, -144, 17, 0, 7); ctx.fill();          // head
+    ctx.restore();
+  }
+  function drawAim() {
+    if (phase !== "aim") return;
+    const c = css("--accent", "#ffd21a");
+    ctx.strokeStyle = c; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(aim.x, aim.y, 18, 0, 7); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(aim.x - 28, aim.y); ctx.lineTo(aim.x - 10, aim.y); ctx.moveTo(aim.x + 10, aim.y); ctx.lineTo(aim.x + 28, aim.y);
+    ctx.moveTo(aim.x, aim.y - 28); ctx.lineTo(aim.x, aim.y - 10); ctx.moveTo(aim.x, aim.y + 10); ctx.lineTo(aim.x, aim.y + 28); ctx.stroke();
+  }
+  function drawMessage() {
+    if (!message) return;
+    ctx.save();
+    ctx.globalAlpha = Math.min(1, msgT * 4);
+    ctx.font = 'italic 900 100px "Kanit", Impact, sans-serif';
+    ctx.textAlign = "center";
+    ctx.lineWidth = 10; ctx.strokeStyle = "rgba(0,0,0,0.55)"; ctx.strokeText(message, W / 2, 104);
+    ctx.fillStyle = message === "GOAL!" ? css("--accent", "#ffd21a") : "#ffffff"; ctx.fillText(message, W / 2, 104);
+    ctx.restore();
+  }
+  const restKeeper = () => ({ x: 480, rot: 0, lift: 0, reach: 0 });
+  const restBall = () => ({ x: SPOT.x, y: SPOT.y, gy: SPOT.y + 10, r: 15 });
+  let keeper = restKeeper(), ball = restBall();
+  function draw() { drawScene(ball, keeper); drawAim(); drawMessage(); }
+  window.__pensDraw = draw;
+
+  function updateBoard() {
+    kicksEl.forEach((el, i) => {
+      el.className = ""; el.textContent = "";
+      if (results[i] === "goal") el.className = "goal";
+      else if (results[i]) { el.className = "miss"; el.textContent = "×"; }
+    });
+    const goals = results.filter((r) => r === "goal").length;
+    scoreEl.textContent = goals + " / 5";
+    document.getElementById("bug-score").textContent = goals + "–0";  // the header scorebug keeps your penalty tally
+    return goals;
+  }
+
+  function shoot() {
+    if (phase !== "aim") return;
+    phase = "flight";
+    const target = { x: aim.x + (Math.random() - 0.5) * 26, y: aim.y + (Math.random() - 0.5) * 22 };
+    // the keeper guesses a third of the goal, leaning towards the middle
+    const third = (x) => (x < 397 ? -1 : x > 563 ? 1 : 0);
+    const roll = Math.random();
+    const guess = roll < 0.36 ? -1 : roll < 0.72 ? 1 : 0;
+    const diveX = 480 + guess * 170;
+    const inside = target.x > GOAL.x0 + 4 && target.x < GOAL.x1 - 4 && target.y > GOAL.top + 4 && target.y < GOAL.bottom;
+    const corner = (target.x < GOAL.x0 + 55 || target.x > GOAL.x1 - 55) && target.y < GOAL.top + 70;
+    const reachable = Math.abs(target.x - diveX) < (guess === 0 ? 95 : 125) && target.y > GOAL.top + 18;
+    const saved = inside && !corner && third(target.x) === guess && reachable;
+    const result = !inside ? "miss" : saved ? "saved" : "goal";
+    const T = 0.55, start = performance.now();
+    anim = (now) => {
+      const k = Math.min(1, (now - start) / 1000 / T);
+      const e = 1 - Math.pow(1 - k, 2);
+      ball.x = SPOT.x + (target.x - SPOT.x) * e;
+      ball.gy = SPOT.y + 10 + (GOAL.bottom - SPOT.y - 6) * e;
+      ball.y = SPOT.y + (target.y - SPOT.y) * e - Math.sin(Math.PI * k) * 30;
+      ball.r = 15 - 6 * e;
+      const kk = Math.min(1, k * 1.25);
+      keeper.x = 480 + (diveX - 480) * kk;
+      keeper.rot = guess * 1.05 * kk;
+      keeper.lift = (guess === 0 ? 26 : 34) * Math.sin(Math.PI * Math.min(1, kk));
+      keeper.reach = 0.5 * kk;
+      if (saved && k > 0.8) { ball.x += (480 - ball.x) * 0.15; ball.y += 8; }
+      draw();
+      if (k < 1) return requestAnimationFrame(anim);
+      results.push(result === "goal" ? "goal" : "miss");
+      message = result === "goal" ? "GOAL!" : result === "saved" ? "SAVED" : "WIDE";
+      msgT = 0;
+      const goals = updateBoard();
+      live.textContent = "Kick " + results.length + ": " + (result === "goal" ? "goal" : result === "saved" ? "saved by the keeper" : "off target") + ". " + goals + " of " + results.length + " scored.";
+      const t0 = performance.now();
+      const fade = (n) => { msgT = (n - t0) / 1000; draw(); if (msgT < 1.1) requestAnimationFrame(fade); else next(); };
+      requestAnimationFrame(fade);
+    };
+    requestAnimationFrame(anim);
+  }
+  function next() {
+    message = "";
+    keeper = restKeeper(); ball = restBall();
+    if (results.length >= 5) {
+      phase = "done";
+      const goals = results.filter((r) => r === "goal").length;
+      if (goals > best) { best = goals; store.set("ko-pens-best", String(best)); showBest(); }
+      message = goals === 5 ? "PERFECT" : goals + " FROM 5";
+      msgT = 1;
+      live.textContent = "Shootout over: " + goals + " of 5. " + (goals === 5 ? "Perfect." : goals >= 4 ? "Ice cold." : goals >= 3 ? "Good enough to win most." : "The keeper had your number.");
+      again.hidden = false;
+    } else {
+      phase = "aim";
+    }
+    draw();
+  }
+  function reset() { results = []; updateBoard(); again.hidden = true; live.textContent = ""; message = ""; phase = "aim"; keeper = restKeeper(); ball = restBall(); draw(); cv.focus(); }
+
+  function toCanvas(e) {
+    const r = cv.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * W / r.width, y: (e.clientY - r.top) * H / r.height };
+  }
+  function clampAim(p) { return { x: Math.min(GOAL.x1 + 40, Math.max(GOAL.x0 - 40, p.x)), y: Math.min(GOAL.bottom - 12, Math.max(GOAL.top - 40, p.y)) }; }
+  cv.addEventListener("pointermove", (e) => { if (phase !== "aim") return; aim = clampAim(toCanvas(e)); draw(); });
+  cv.addEventListener("pointerdown", (e) => { if (phase !== "aim") return; aim = clampAim(toCanvas(e)); draw(); shoot(); });
+  cv.addEventListener("keydown", (e) => {
+    const step = 22;
+    if (e.key === "ArrowLeft") aim.x -= step; else if (e.key === "ArrowRight") aim.x += step;
+    else if (e.key === "ArrowUp") aim.y -= step; else if (e.key === "ArrowDown") aim.y += step;
+    else if (e.key === " " || e.key === "Enter") { e.preventDefault(); if (phase === "done") reset(); else shoot(); return; }
+    else return;
+    e.preventDefault();
+    aim = clampAim(aim);
+    if (phase === "aim") draw();
+  });
+  again.addEventListener("click", reset);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+  draw();
+})();
+</script>

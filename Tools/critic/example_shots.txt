@@ -1,0 +1,5 @@
+# name | seconds into play | camera | look-at | fov | options
+# camera: broadcast | x,y,z | follow:<target>:dx,dy,dz     look-at: ball | carrier | player:<team>:<number> | x,y,z
+broadcast_1 | 3 | broadcast | - | - |
+wide_stadium | 6 | 0,-9500,3800 | 0,0,0 | 70 | nohud
+carrier_close | 9 | follow:carrier:-280,-320,180 | carrier | 35 | nohud
