@@ -891,6 +891,23 @@ void SPKMenu::RebuildTeamSetup()
 		});
 	};
 	const int32 NumClubs = G->Clubs.Num();
+	const int32 NumKits = FMath::Max(1, Club.Kits.Num());
+	// three colour chips (shirt, second colour, shorts), optionally with the kit's name
+	auto KitSwatch = [this](const FPKKit& Kit, bool bName) -> TSharedRef<SWidget>
+	{
+		auto Chip = [this](const FLinearColor& C) -> TSharedRef<SWidget>
+		{
+			return SNew(SBox).WidthOverride(22.f).HeightOverride(14.f)[SNew(SImage).Image(&WhiteBrush).ColorAndOpacity(C)];
+		};
+		return SNew(SHorizontalBox)
+			+ SHorizontalBox::Slot().AutoWidth().VAlign(VAlign_Center)[Chip(Kit.Primary)]
+			+ SHorizontalBox::Slot().AutoWidth().VAlign(VAlign_Center).Padding(2.f, 0.f)[Chip(Kit.Secondary)]
+			+ SHorizontalBox::Slot().AutoWidth().VAlign(VAlign_Center)[Chip(Kit.Shorts)]
+			+ SHorizontalBox::Slot().AutoWidth().VAlign(VAlign_Center).Padding(10.f, 0.f, 0.f, 0.f)
+			[
+				SNew(STextBlock).Text(Txt(bName ? Kit.Name : FString())).Font(Font(10, false)).ColorAndOpacity(Dim)
+			];
+	};
 	auto StepOpponent = [NumClubs](UPKGameInstance* G2, int32 Step)
 	{
 		do
@@ -923,6 +940,16 @@ void SPKMenu::RebuildTeamSetup()
 		]
 		+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 16.f, 0.f, 0.f)
 		[
+			BuildSelector(TEXT("KIT"), Club.Kit.Name,
+				Change(TEXT("KIT<"), [NumKits](UPKGameInstance* G2) { G2->UserKit = (G2->UserKit + NumKits - 1) % NumKits; }),
+				Change(TEXT("KIT>"), [NumKits](UPKGameInstance* G2) { G2->UserKit = (G2->UserKit + 1) % NumKits; }))
+		]
+		+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 6.f, 0.f, 0.f)
+		[
+			KitSwatch(Club.Kit, false) // (the selector already names it)
+		]
+		+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 16.f, 0.f, 0.f)
+		[
 			BuildSelector(TEXT("OPPONENT"), Opp.Name,
 				Change(TEXT("OPPONENT<"), [StepOpponent](UPKGameInstance* G2) { StepOpponent(G2, -1); }),
 				Change(TEXT("OPPONENT>"), [StepOpponent](UPKGameInstance* G2) { StepOpponent(G2, 1); }))
@@ -931,6 +958,10 @@ void SPKMenu::RebuildTeamSetup()
 		[
 			SNew(STextBlock).Text(Txt(FString::Printf(TEXT("%s  -  %s  -  rating %d"), PKTeams::Formations()[Opp.Formation].Name, StyleNames[Opp.Style], OppRating)))
 			.Font(Font(10, false)).ColorAndOpacity(FLinearColor(1.f, 0.55f, 0.5f))
+		]
+		+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 4.f, 0.f, 0.f)
+		[
+			KitSwatch(Opp.Kit, true) // the opponent changes kit by itself when theirs would clash with the one picked above
 		]
 		+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 22.f, 0.f, 0.f)
 		[

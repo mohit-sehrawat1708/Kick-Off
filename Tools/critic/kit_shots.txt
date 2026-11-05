@@ -1,0 +1,10 @@
+# Kit check: both sides front / back / side, plus the broadcast view
+broadcast | 4 | broadcast | - | - |
+home_front | 6 | orbit:player:0:8:300,0,30 | player:0:8 | 35 | nohud
+home_back | 8 | orbit:player:0:8:-300,0,30 | player:0:8 | 35 | nohud
+away_front | 10 | orbit:player:1:8:300,0,30 | player:1:8 | 35 | nohud
+away_back | 12 | orbit:player:1:8:-300,0,30 | player:1:8 | 35 | nohud
+home_side | 14 | orbit:player:0:10:0,300,30 | player:0:10 | 35 | nohud
+away_side | 16 | orbit:player:1:10:0,-300,30 | player:1:10 | 35 | nohud
+keepers | 18 | follow:player:0:1:500,-500,250 | player:0:1 | 45 | nohud
+mid_wide | 20 | 0,-2600,900 | 0,0,0 | 55 | nohud

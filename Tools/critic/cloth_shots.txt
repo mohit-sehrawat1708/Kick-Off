@@ -1,0 +1,11 @@
+﻿# cloth motion: one player, frames 0.7 s apart
+c01 | 6.0 | orbit:player:0:8:-220,-150,40 | player:0:8 | 38 | nohud
+c02 | 6.7 | orbit:player:0:8:-220,-150,40 | player:0:8 | 38 | nohud
+c03 | 7.4 | orbit:player:0:8:-220,-150,40 | player:0:8 | 38 | nohud
+c04 | 8.1 | orbit:player:0:8:-220,-150,40 | player:0:8 | 38 | nohud
+c05 | 8.8 | orbit:player:1:10:200,150,40 | player:1:10 | 38 | nohud
+c06 | 9.5 | orbit:player:1:10:200,150,40 | player:1:10 | 38 | nohud
+c07 | 10.2 | orbit:player:1:10:-200,150,40 | player:1:10 | 38 | nohud
+c08 | 10.9 | follow:carrier:-260,-260,160 | carrier | 32 | nohud
+c09 | 11.6 | follow:carrier:-260,-260,160 | carrier | 32 | nohud
+c10 | 12.3 | broadcast | - | - |

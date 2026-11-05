@@ -1,0 +1,20 @@
+# Promo screenshots for the Kick Off website
+# name | seconds into play | camera | look-at | fov | options
+s_wide_stadium | 5 | 0,-7000,1800 | 0,0,0 | 62 | nohud
+s_broadcast_hud | 8 | broadcast | - | - |
+s_carrier_close | 12 | follow:carrier:-400,-250,120 | carrier | 30 | nohud
+s_face_home9 | 15 | orbit:player:0:9:head:130,30,10 | player:0:9:head | 22 | nohud
+s_face_away4 | 17 | orbit:player:1:4:head:130,-30,10 | player:1:4:head | 22 | nohud
+s_keeper_home | 19 | orbit:player:0:1:350,60,20 | player:0:1 | 26 | nohud
+s_body_front_home8 | 21 | orbit:player:0:8:520,0,0 | player:0:8 | 30 | nohud
+s_ball_close | 24 | follow:ball:-160,-200,50 | ball | 28 | nohud
+s_behind_goal | 27 | 5900,300,350 | 0,0,0 | 55 | nohud
+s_low_pitch | 30 | -1500,-2500,15 | 1500,0,30 | 60 | nohud
+s_crowd_mid | 33 | 2000,-3300,250 | -1500,-6500,1500 | 50 | nohud
+s_carrier_low | 38 | follow:carrier:-350,220,70 | carrier | 32 | nohud
+s_high_wide | 42 | 0,-4000,1500 | 0,0,0 | 62 | nohud
+s_broadcast_late | 48 | broadcast | - | - |
+s_pack_wide | 55 | follow:carrier:-700,-800,320 | carrier | 42 | nohud
+s_face_away9 | 60 | orbit:player:1:9:head:130,-40,10 | player:1:9:head | 22 | nohud
+s_corner_flag | 64 | 4900,-3100,60 | 5250,-3400,80 | 40 | nohud
+s_carrier_late | 70 | follow:carrier:-380,-280,140 | carrier | 30 | nohud

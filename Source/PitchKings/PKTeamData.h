@@ -33,7 +33,8 @@ struct FPKClub
 	int32 Style = 0;       // EPKTeamStyle
 	int32 Formation = 0;   // index into PKTeams::Formations()
 	TArray<FPKSquadPlayer> Squad; // 18: 2 GK, 6 DEF, 6 MID, 4 FWD
-	FPKKit Kit;
+	TArray<FPKKit> Kits; // home, away, third (the player's club has more to choose from)
+	FPKKit Kit;          // the kit worn in the next match (UPKGameInstance::ResolveKits)
 };
 
 struct FPKFormationSlot
@@ -66,4 +67,8 @@ namespace PKTeams
 	// Average team-sheet rating of a line-up.
 	int32 TeamRating(const FPKClub& Club, int32 Formation, const TArray<int32>& Lineup);
 	FString TraitNames(uint32 Traits, uint32 Plus = 0);
+	// How alike two kits look on the pitch (0 = nothing alike .. 1 = the same): shirt colour, then shorts.
+	float KitClash(const FPKKit& A, const FPKKit& B);
+	// The first of the club's kits that doesn't clash with the other team's (home, then away, then third).
+	int32 ChooseKit(const FPKClub& Club, const FPKKit& Against);
 }

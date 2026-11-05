@@ -22,3 +22,9 @@ Tools/critic/*/
 
 # Cooker file-order logs
 Build/Windows/FileOpenOrder/
+
+# Website design-tool captures and logs
+Website/.hallmark/
+
+# Capture logs
+Tools/critic/*.log

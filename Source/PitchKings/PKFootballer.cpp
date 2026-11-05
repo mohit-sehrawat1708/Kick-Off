@@ -824,9 +824,59 @@ FString APKFootballer::TraitNames(int32 MaxNames) const
 	return PKTrait::Names(Traits, TraitsPlus, MaxNames);
 }
 
+void APKFootballer::UpdateClothMotion(float DeltaSeconds)
+{
+	if (!bMetaHumanParts || !MHShirtMID || DeltaSeconds <= 0.f)
+	{
+		return;
+	}
+	const FVector Vel = GetVelocity();
+	const float Yaw = GetActorRotation().Yaw;
+	if (!bClothPrimed)
+	{
+		ClothPrevVel = Vel;
+		ClothPrevYaw = Yaw;
+		bClothPrimed = true;
+	}
+	const float Dt = FMath::Min(DeltaSeconds, 0.1f);
+	const FVector Accel = ((Vel - ClothPrevVel) / Dt).GetClampedToMaxSize(4000.f);
+	const float YawRate = FMath::DegreesToRadians(FMath::FindDeltaAngleDegrees(ClothPrevYaw, Yaw)) / Dt;
+	const float YawAccel = FMath::Clamp((YawRate - ClothPrevYawRate) / Dt, -150.f, 150.f);
+	ClothPrevVel = Vel;
+	ClothPrevYaw = Yaw;
+	ClothPrevYawRate = YawRate;
+	// a light, under-damped spring (~1.7 Hz, a shirt settles after a swing or two); sub-stepped for long frames
+	const float K = 115.f, C = 7.5f;
+	const int32 Steps = FMath::Clamp(FMath::CeilToInt(Dt / (1.f / 60.f)), 1, 6);
+	const float H = Dt / Steps;
+	for (int32 i = 0; i < Steps; ++i)
+	{
+		ClothLagVel += (-K * ClothLag - C * ClothLagVel - Accel * 0.32f) * H;
+		ClothLag += ClothLagVel * H;
+		ClothTwistVel += (-K * ClothTwist - C * ClothTwistVel - YawAccel * 0.8f) * H;
+		ClothTwist += ClothTwistVel * H;
+	}
+	ClothLag = ClothLag.GetClampedToMaxSize(7.f);
+	ClothTwist = FMath::Clamp(ClothTwist, -0.3f, 0.3f);
+	const FVector Flat(Vel.X, Vel.Y, 0.f);
+	ClothSpeed = FMath::FInterpTo(ClothSpeed, FMath::Clamp(Flat.Size() / 750.f, 0.f, 1.f), Dt, 6.f);
+	const FVector Dir = Flat.GetSafeNormal();
+	const FLinearColor LagParam(ClothLag.X, ClothLag.Y, ClothLag.Z, ClothTwist);
+	const FLinearColor WindParam(Dir.X, ClothSpeed, Dir.Y, (float)(Index * 2.3f + Team * 1.1f));
+	for (UMaterialInstanceDynamic* MID : { MHShirtMID.Get(), MHShortsMID.Get() })
+	{
+		if (MID)
+		{
+			MID->SetVectorParameterValue(TEXT("ClothLag"), LagParam);
+			MID->SetVectorParameterValue(TEXT("ClothWind"), WindParam);
+		}
+	}
+}
+
 void APKFootballer::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	UpdateClothMotion(DeltaSeconds);
 	if (bReplaying)
 	{
 		return; // posed from the replay recording

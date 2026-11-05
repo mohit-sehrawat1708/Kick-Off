@@ -201,13 +201,39 @@ float sleeveEnd = keeper ? 2.0 : saturate(KitA.z) * 0.95 + 0.05; // keeper sleev
 float hemZ = 93.5 - (0.33 + 0.35 * saturate(KitA.w)) * (93.5 - 50.3); // below the pocket linings
 """
 
+CLOTH_FX = r"""
+struct ClothFx
+{
+	// 0 where the fabric is held (shoulders, collar, waistband), 1 where it hangs free (shirt hem, sleeve ends, shorts legs)
+	float Loose(float3 p, float part)
+	{
+		if (part > 0.5) return saturate((91.0 - p.z) / 16.0);
+		float ax = abs(p.x);
+		float torso = saturate((141.0 - p.z) / 42.0);
+		torso *= torso;
+		float sleeve = saturate((ax - 18.0) / 9.0);   // loose all down the sleeve: the cuff flaps with the run
+		return saturate(max(torso, sleeve * 0.9));
+	}
+	// travelling folds: slow drift standing still, faster and deeper when running
+	float Ripple(float3 p, float t, float s, float seed)
+	{
+		float a = sin(p.z * 0.29 + p.x * 0.11 - t * (2.2 + 9.0 * s) + seed);
+		float b = sin(p.x * 0.23 - p.y * 0.19 + t * (1.6 + 5.0 * s) + seed * 1.7);
+		float c = sin(p.z * 0.57 - p.y * 0.17 - t * (3.0 + 13.0 * s) + seed * 2.3);
+		return a * 0.55 + b * 0.3 + c * 0.25 * s;
+	}
+	float Amp(float s) { return 0.2 + 1.3 * s; } // cm (0.12 + 0.75 read as a rigid shell at match distance)
+};
+"""
+
+
 CLOTH_COLOR = CLOTH_LIB + r"""
 float3 c;
 if (Part < 0.5)
 {
 	// stripes follow the arc length round the torso (straight x stretched them into blobs on the side panels);
 	// radius 14.32 cm makes the girth exactly 90 cm, a whole number of stripe and pinstripe periods
-	bool striped = (KitA.x > 0.5 && KitA.x < 1.5) || KitA.x > 4.5;
+	bool striped = (KitA.x > 0.5 && KitA.x < 1.5) || (KitA.x > 4.5 && KitA.x < 5.5); // (6+ use the planar mapping)
 	float3 mp = striped ? float3(atan2(m.x, m.y - 2.0) * 14.32, m.y, m.z) : m;
 	c = armT < 0.0 ? K.ShirtColor(mp, KitA.x, Primary.rgb, Secondary.rgb) : (striped || keeper ? Primary.rgb : K.ShirtColor(m, KitA.x, Primary.rgb, Secondary.rgb));
 	// lettering in the kit typeface (mannequin coordinates; seen from behind, the reader's right is the player's right: -X)
@@ -352,7 +378,69 @@ def make_cloth():
     mul = e(mat, unreal.MaterialExpressionMultiply, -500, 1450)
     MEL.connect_material_expressions(lift, "", mul, "A")
     MEL.connect_material_expressions(nws, "", mul, "B")
-    MEL.connect_material_property(mul, "", MP.MP_WORLD_POSITION_OFFSET)
+    # cloth motion: the loose fabric lags the body (spring from C++), twists when turning, is blown against the back
+    # of the shirt when running, and carries travelling folds
+    lag = vec(mat, "ClothLag", (0, 0, 0, 0), -1400, 1700)
+    lagv = e(mat, unreal.MaterialExpressionAppendVector, -1200, 1700)
+    MEL.connect_material_expressions(lag, "", lagv, "A")
+    MEL.connect_material_expressions(lag, "A", lagv, "B")
+    wind = vec(mat, "ClothWind", (1, 0, 0, 0), -1400, 1800)
+    windv = e(mat, unreal.MaterialExpressionAppendVector, -1200, 1800)
+    MEL.connect_material_expressions(wind, "", windv, "A")
+    MEL.connect_material_expressions(wind, "A", windv, "B")
+    tm = e(mat, unreal.MaterialExpressionTime, -1400, 1900)
+    wpos = e(mat, unreal.MaterialExpressionWorldPosition, -1400, 2000)
+    opos = e(mat, unreal.MaterialExpressionObjectPositionWS, -1400, 2100)
+    rel = e(mat, unreal.MaterialExpressionSubtract, -1200, 2050)
+    MEL.connect_material_expressions(wpos, "", rel, "A")
+    MEL.connect_material_expressions(opos, "", rel, "B")
+    motion = custom(mat, CLOTH_FX + r"""
+ClothFx C;
+float l = C.Loose(P, Part);
+if (l <= 0.0) return float3(0, 0, 0);
+float s = saturate(Wind.y);
+float3 n = normalize(Nw);
+float3 d = float3(Lag.x, Lag.y, Lag.z * 0.3) * l;                       // inertia (little vertical: the waist stays covered)
+d += n * length(Lag.xyz) * 0.35 * l;                                     // a swinging hem lifts off the body, never into the shorts
+d += float3(-Rel.y, Rel.x, 0.0) * Lag.w * l;                             // twist round the body when turning
+float2 run = Wind.xz;
+float face = dot(n.xy, -run);                                            // >0 on the side facing away from the run
+d += n * (face > 0.0 ? face * 2.4 : face * 0.5) * s * sqrt(l);           // billows at the back, pressed flat at the front
+d += float3(-run * 0.9, 0.0) * s * l;                                    // streams back a little
+d += n * C.Ripple(P, T, s, Wind.w) * C.Amp(s) * l;
+return d;""", F3, -800, 1700, [("P", rawp, ""), ("Nw", nws, ""), ("Lag", lagv, ""), ("Wind", windv, ""), ("T", tm, ""),
+                                 ("Rel", rel, ""), ("Part", src["Part"][0], "")], "Cloth motion (cm)")
+    wpo = e(mat, unreal.MaterialExpressionAdd, -350, 1500)
+    MEL.connect_material_expressions(mul, "", wpo, "A")
+    MEL.connect_material_expressions(motion, "", wpo, "B")
+    MEL.connect_material_property(wpo, "", MP.MP_WORLD_POSITION_OFFSET)
+    # the moving folds in the shading too (vertex offsets alone don't change the lighting): the ripple's slope,
+    # reference pose -> world -> tangent space, blended over the fabric normals
+    grad = custom(mat, CLOTH_FX + r"""
+ClothFx C;
+float l = C.Loose(P, Part);
+float s = saturate(Wind.y);
+float k = C.Amp(s) * l * 1.4;
+float f0 = C.Ripple(P, T, s, Wind.w);
+float3 g = float3(C.Ripple(P + float3(0.5, 0, 0), T, s, Wind.w) - f0, C.Ripple(P + float3(0, 0.5, 0), T, s, Wind.w) - f0,
+                  C.Ripple(P + float3(0, 0, 0.5), T, s, Wind.w) - f0) / 0.5;
+return g * k;""", F3, -800, 2000, [("P", P, ""), ("Wind", windv, ""), ("T", tm, ""), ("Part", src["Part"][0], "")], "Fold slope")
+    gw = e(mat, unreal.MaterialExpressionTransform, -600, 2000)
+    gw.set_editor_property("transform_source_type", unreal.MaterialVectorCoordTransformSource.TRANSFORMSOURCE_LOCAL)
+    gw.set_editor_property("transform_type", unreal.MaterialVectorCoordTransform.TRANSFORM_WORLD)
+    MEL.connect_material_expressions(grad, "", gw, "")
+    nws2 = e(mat, unreal.MaterialExpressionVertexNormalWS, -600, 2100)
+    tilt = custom(mat, "float3 n = normalize(N); float3 gt = G - n * dot(G, n); return normalize(n - gt);", F3, -450, 2050,
+                  [("N", nws2, ""), ("G", gw, "")], "Fold normal (world)")
+    tn = e(mat, unreal.MaterialExpressionTransform, -300, 2050)
+    tn.set_editor_property("transform_source_type", unreal.MaterialVectorCoordTransformSource.TRANSFORMSOURCE_WORLD)
+    tn.set_editor_property("transform_type", unreal.MaterialVectorCoordTransform.TRANSFORM_TANGENT)
+    MEL.connect_material_expressions(tilt, "", tn, "")
+    blend2 = e(mat, unreal.MaterialExpressionMaterialFunctionCall, -150, 1000)
+    blend2.set_editor_property("material_function", unreal.load_asset("/Engine/Functions/Engine_MaterialFunctions02/Utility/BlendAngleCorrectedNormals"))
+    MEL.connect_material_expressions(tn, "", blend2, "BaseNormal")
+    MEL.connect_material_expressions(blend, "", blend2, "AdditionalNormal")
+    MEL.connect_material_property(blend2, "", MP.MP_NORMAL)
     MEL.recompile_material(mat)
     EAL.save_asset(full)
     log("cloth material built (normal %s, knit %s)" % (nmap.get_name() if nmap else None, knit.get_name() if knit else None))

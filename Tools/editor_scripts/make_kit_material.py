@@ -168,7 +168,19 @@ struct KitLib
 		else if (pattern < 2.5 && pattern > 1.5) { float t = frac((p.z - 100.0) / 11.0); float w = max(fwidth(p.z / 11.0), 1e-3); s = smoothstep(0.5 - w, 0.5 + w, t) * (1.0 - smoothstep(1.0 - w, 1.0, t)); }
 		else if (pattern < 3.5 && pattern > 2.5) { float d = abs(p.x * 0.85 + (p.z - 122.0)); float w = max(fwidth(d), 1e-3); s = 1.0 - smoothstep(6.5 - w, 6.5 + w, d); }
 		else if (pattern < 4.5 && pattern > 3.5) { float w = max(fwidth(p.x), 1e-3); s = smoothstep(-w, w, p.x); }
-		else if (pattern > 4.5) { float t = frac(p.x / 5.0); float w = max(fwidth(p.x / 5.0), 1e-3); s = smoothstep(0.86 - w, 0.86 + w, t) * (1.0 - smoothstep(1.0 - w, 1.0, t)); }
+		else if (pattern < 5.5 && pattern > 4.5) { float t = frac(p.x / 5.0); float w = max(fwidth(p.x / 5.0), 1e-3); s = smoothstep(0.86 - w, 0.86 + w, t) * (1.0 - smoothstep(1.0 - w, 1.0, t)); }
+		// 6 chevron: a V across the chest, pointing down at the sternum
+		else if (pattern < 6.5 && pattern > 5.5) { float d = abs(p.z - (119.0 + abs(p.x) * 0.75)); float w = max(fwidth(d), 1e-3); s = 1.0 - smoothstep(3.2 - w, 3.2 + w, d); }
+		// 7 quarters
+		else if (pattern < 7.5 && pattern > 6.5) { float wx = max(fwidth(p.x), 1e-3), wz = max(fwidth(p.z), 1e-3); float sx = smoothstep(-wx, wx, p.x), sz = smoothstep(120.0 - wz, 120.0 + wz, p.z); s = sx + sz - 2.0 * sx * sz; }
+		// 8 chest band
+		else if (pattern < 8.5 && pattern > 7.5) { float w = max(fwidth(p.z), 1e-3); s = smoothstep(121.0 - w, 121.0 + w, p.z) * (1.0 - smoothstep(133.0 - w, 133.0 + w, p.z)); }
+		// 9 fade: the main colour at the hem into the second colour at the shoulders
+		else if (pattern < 9.5 && pattern > 8.5) { s = smoothstep(100.0, 142.0, p.z); }
+		// 10 yoke: contrast shoulders and sleeves
+		else if (pattern < 10.5 && pattern > 9.5) { float w = max(fwidth(p.z), 1e-3); s = max(smoothstep(134.0 - w, 134.0 + w, p.z), smoothstep(17.5, 18.5, abs(p.x))); }
+		// 11 centre stripe
+		else if (pattern > 10.5) { float w = max(fwidth(p.x), 1e-3); s = 1.0 - smoothstep(5.0 - w, 5.0 + w, abs(p.x)); }
 		return lerp(a, b, s);
 	}
 };

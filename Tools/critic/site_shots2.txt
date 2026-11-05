@@ -1,0 +1,28 @@
+# Promo screenshots for the Kick Off website, round 2 (every picture from the current build)
+# name | seconds into play | camera | look-at | fov | options
+t_stand_bigscreen | 5 | 0,-3000,400 | 5800,4800,2200 | 45 | nohud
+t_far_stand_wide | 7 | -5000,-3000,600 | 3000,4500,1200 | 65 | nohud
+t_broadcast_hud | 9 | broadcast | - | - |
+t_face_home4 | 11 | orbit:player:0:4:head:130,-30,10 | player:0:4:head | 22 | nohud
+t_face_home7 | 13 | orbit:player:0:7:head:130,30,10 | player:0:7:head | 22 | nohud
+t_face_home10 | 15 | orbit:player:0:10:head:130,25,8 | player:0:10:head | 22 | nohud
+t_face_away7 | 17 | orbit:player:1:7:head:130,-30,10 | player:1:7:head | 22 | nohud
+t_face_away10 | 19 | orbit:player:1:10:head:130,30,8 | player:1:10:head | 22 | nohud
+t_face_away11 | 21 | orbit:player:1:11:head:130,-25,10 | player:1:11:head | 22 | nohud
+t_action_a | 24 | follow:carrier:-360,-260,130 | carrier | 30 | nohud
+t_action_b | 28 | follow:carrier:-300,240,90 | carrier | 32 | nohud
+t_side_run_a | 32 | follow:carrier:0,-520,140 | carrier | 34 | nohud
+t_action_c | 36 | follow:carrier:-420,-300,160 | carrier | 30 | nohud
+t_duel_a | 40 | follow:carrier:-520,-420,200 | carrier | 32 | nohud
+t_side_run_b | 44 | follow:carrier:0,520,140 | carrier | 34 | nohud
+t_action_d | 48 | follow:carrier:-340,200,80 | carrier | 30 | nohud
+t_ball_feet | 52 | follow:ball:-170,-210,55 | ball | 28 | nohud
+t_duel_b | 56 | follow:carrier:-600,-500,240 | carrier | 34 | nohud
+t_keeper_away | 60 | orbit:player:1:1:350,-60,20 | player:1:1 | 26 | nohud
+t_body_away9 | 62 | orbit:player:1:9:520,0,0 | player:1:9 | 30 | nohud
+t_action_e | 66 | follow:carrier:-380,-280,140 | carrier | 30 | nohud
+t_side_run_c | 70 | follow:carrier:0,-520,140 | carrier | 34 | nohud
+t_broadcast_late | 74 | broadcast | - | - |
+t_action_f | 78 | follow:carrier:-300,250,100 | carrier | 32 | nohud
+t_goalmouth | 82 | 4500,-900,150 | 5300,0,120 | 50 | nohud
+t_action_g | 86 | follow:carrier:-420,-260,150 | carrier | 30 | nohud

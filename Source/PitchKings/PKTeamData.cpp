@@ -281,39 +281,84 @@ namespace PKTeams
 	}
 
 	// Appearance from the player's own seed: skin, hair, beard, boots, and a build that follows his strength.
-	// Kits: the person's club in blue, the opponents in reds, each with its own design and keeper colours.
-	FPKKit MakeKit(int32 Club)
+	// Kits: the player's club has eight to choose from; every opponent has home, away and third kits in different
+	// colours and designs (patterns: 0 plain, 1 stripes, 2 hoops, 3 sash, 4 halves, 5 pinstripes, 6 chevron,
+	// 7 quarters, 8 chest band, 9 fade, 10 contrast shoulders, 11 centre stripe).
+	struct FKitDef
+	{
+		const TCHAR* Name;
+		int32 Pattern;
+		float P[3], S[3], T[3], Sh[3], So[3], N[3];
+		float K[3], KS[3], KSh[3];
+	};
+
+	FPKKit FromDef(const FKitDef& D)
 	{
 		FPKKit K;
+		K.Name = D.Name;
+		K.Pattern = D.Pattern;
+		K.Primary = Lin(D.P[0], D.P[1], D.P[2]);
+		K.Secondary = Lin(D.S[0], D.S[1], D.S[2]);
+		K.Trim = Lin(D.T[0], D.T[1], D.T[2]);
+		K.Shorts = Lin(D.Sh[0], D.Sh[1], D.Sh[2]);
+		K.Socks = Lin(D.So[0], D.So[1], D.So[2]);
+		K.Number = Lin(D.N[0], D.N[1], D.N[2]);
+		K.KeeperPrimary = Lin(D.K[0], D.K[1], D.K[2]);
+		K.KeeperSecondary = Lin(D.KS[0], D.KS[1], D.KS[2]);
+		K.KeeperShorts = Lin(D.KSh[0], D.KSh[1], D.KSh[2]);
+		return K;
+	}
+
+	TArray<FPKKit> MakeKits(int32 Club)
+	{
+		// name, pattern, shirt, second colour, trim, shorts, socks, number, keeper shirt / second / shorts
+		static const FKitDef Kings[] = {
+			{ TEXT("Home: royal pinstripes"), 5, {0.08f, 0.30f, 0.85f}, {0.03f, 0.10f, 0.40f}, {0.95f, 0.95f, 0.95f}, {0.95f, 0.95f, 0.97f}, {0.08f, 0.30f, 0.85f}, {0.97f, 0.97f, 0.97f}, {0.15f, 0.75f, 0.25f}, {0.05f, 0.35f, 0.10f}, {0.08f, 0.08f, 0.10f} },
+			{ TEXT("Away: white chevron"), 6, {0.96f, 0.96f, 0.96f}, {0.08f, 0.30f, 0.85f}, {0.05f, 0.10f, 0.35f}, {0.05f, 0.10f, 0.35f}, {0.96f, 0.96f, 0.96f}, {0.05f, 0.10f, 0.35f}, {0.15f, 0.75f, 0.25f}, {0.05f, 0.35f, 0.10f}, {0.08f, 0.08f, 0.10f} },
+			{ TEXT("Third: black and volt"), 8, {0.08f, 0.08f, 0.09f}, {0.72f, 0.95f, 0.15f}, {0.72f, 0.95f, 0.15f}, {0.08f, 0.08f, 0.09f}, {0.08f, 0.08f, 0.09f}, {0.72f, 0.95f, 0.15f}, {0.95f, 0.45f, 0.10f}, {0.40f, 0.15f, 0.02f}, {0.08f, 0.08f, 0.08f} },
+			{ TEXT("Sky blue quarters"), 7, {0.45f, 0.72f, 0.95f}, {0.05f, 0.12f, 0.38f}, {0.96f, 0.96f, 0.96f}, {0.05f, 0.12f, 0.38f}, {0.45f, 0.72f, 0.95f}, {0.96f, 0.96f, 0.96f}, {0.15f, 0.75f, 0.25f}, {0.05f, 0.35f, 0.10f}, {0.08f, 0.08f, 0.10f} },
+			{ TEXT("Teal fade"), 9, {0.00f, 0.55f, 0.55f}, {0.00f, 0.22f, 0.32f}, {0.96f, 0.96f, 0.96f}, {0.96f, 0.96f, 0.96f}, {0.00f, 0.55f, 0.55f}, {0.96f, 0.96f, 0.96f}, {0.95f, 0.45f, 0.10f}, {0.40f, 0.15f, 0.02f}, {0.08f, 0.08f, 0.08f} },
+			{ TEXT("Purple and gold"), 11, {0.38f, 0.15f, 0.62f}, {0.95f, 0.75f, 0.20f}, {0.95f, 0.75f, 0.20f}, {0.20f, 0.07f, 0.35f}, {0.38f, 0.15f, 0.62f}, {0.95f, 0.75f, 0.20f}, {0.15f, 0.75f, 0.25f}, {0.05f, 0.35f, 0.10f}, {0.08f, 0.08f, 0.10f} },
+			{ TEXT("Sunset orange"), 10, {0.98f, 0.48f, 0.12f}, {0.05f, 0.10f, 0.30f}, {0.96f, 0.96f, 0.96f}, {0.05f, 0.10f, 0.30f}, {0.98f, 0.48f, 0.12f}, {0.05f, 0.10f, 0.30f}, {0.15f, 0.75f, 0.25f}, {0.05f, 0.35f, 0.10f}, {0.08f, 0.08f, 0.10f} },
+			{ TEXT("Retro green hoops"), 2, {0.05f, 0.50f, 0.22f}, {0.96f, 0.96f, 0.96f}, {0.96f, 0.96f, 0.96f}, {0.96f, 0.96f, 0.96f}, {0.05f, 0.50f, 0.22f}, {0.05f, 0.08f, 0.20f}, {0.95f, 0.45f, 0.10f}, {0.40f, 0.15f, 0.02f}, {0.08f, 0.08f, 0.08f} },
+		};
+		static const FKitDef Rovers[] = {
+			{ TEXT("Home: red and white hoops"), 2, {0.80f, 0.06f, 0.08f}, {0.96f, 0.96f, 0.96f}, {0.96f, 0.96f, 0.96f}, {0.96f, 0.96f, 0.96f}, {0.80f, 0.06f, 0.08f}, {0.08f, 0.08f, 0.10f}, {0.98f, 0.82f, 0.10f}, {0.40f, 0.32f, 0.02f}, {0.08f, 0.08f, 0.08f} },
+			{ TEXT("Away: navy, red band"), 8, {0.06f, 0.09f, 0.25f}, {0.80f, 0.06f, 0.08f}, {0.80f, 0.06f, 0.08f}, {0.06f, 0.09f, 0.25f}, {0.06f, 0.09f, 0.25f}, {0.96f, 0.96f, 0.96f}, {0.98f, 0.82f, 0.10f}, {0.40f, 0.32f, 0.02f}, {0.08f, 0.08f, 0.08f} },
+			{ TEXT("Third: lime fade"), 9, {0.62f, 0.88f, 0.15f}, {0.10f, 0.45f, 0.15f}, {0.08f, 0.08f, 0.09f}, {0.08f, 0.08f, 0.09f}, {0.62f, 0.88f, 0.15f}, {0.08f, 0.08f, 0.09f}, {0.45f, 0.15f, 0.65f}, {0.15f, 0.04f, 0.25f}, {0.08f, 0.08f, 0.08f} },
+		};
+		static const FKitDef Crimson[] = {
+			{ TEXT("Home: crimson and black stripes"), 1, {0.62f, 0.03f, 0.10f}, {0.07f, 0.07f, 0.08f}, {0.95f, 0.75f, 0.20f}, {0.07f, 0.07f, 0.08f}, {0.07f, 0.07f, 0.08f}, {0.95f, 0.78f, 0.25f}, {0.20f, 0.75f, 0.85f}, {0.05f, 0.30f, 0.40f}, {0.05f, 0.20f, 0.30f} },
+			{ TEXT("Away: white, crimson chevron"), 6, {0.96f, 0.96f, 0.96f}, {0.62f, 0.03f, 0.10f}, {0.95f, 0.75f, 0.20f}, {0.96f, 0.96f, 0.96f}, {0.96f, 0.96f, 0.96f}, {0.62f, 0.03f, 0.10f}, {0.20f, 0.75f, 0.85f}, {0.05f, 0.30f, 0.40f}, {0.05f, 0.20f, 0.30f} },
+			{ TEXT("Third: grey and gold quarters"), 7, {0.45f, 0.47f, 0.50f}, {0.10f, 0.10f, 0.12f}, {0.95f, 0.75f, 0.20f}, {0.12f, 0.12f, 0.14f}, {0.45f, 0.47f, 0.50f}, {0.95f, 0.78f, 0.25f}, {0.20f, 0.75f, 0.85f}, {0.05f, 0.30f, 0.40f}, {0.05f, 0.20f, 0.30f} },
+		};
+		static const FKitDef Rojo[] = {
+			{ TEXT("Home: red, white sash"), 3, {0.85f, 0.12f, 0.12f}, {0.97f, 0.97f, 0.97f}, {0.97f, 0.97f, 0.97f}, {0.85f, 0.12f, 0.12f}, {0.97f, 0.97f, 0.97f}, {0.97f, 0.97f, 0.97f}, {0.45f, 0.15f, 0.65f}, {0.15f, 0.04f, 0.25f}, {0.08f, 0.08f, 0.08f} },
+			{ TEXT("Away: black, red sash"), 3, {0.08f, 0.08f, 0.09f}, {0.85f, 0.12f, 0.12f}, {0.85f, 0.12f, 0.12f}, {0.08f, 0.08f, 0.09f}, {0.08f, 0.08f, 0.09f}, {0.97f, 0.97f, 0.97f}, {0.45f, 0.15f, 0.65f}, {0.15f, 0.04f, 0.25f}, {0.08f, 0.08f, 0.08f} },
+			{ TEXT("Third: sky, white centre stripe"), 11, {0.50f, 0.75f, 0.95f}, {0.97f, 0.97f, 0.97f}, {0.97f, 0.97f, 0.97f}, {0.97f, 0.97f, 0.97f}, {0.50f, 0.75f, 0.95f}, {0.05f, 0.10f, 0.30f}, {0.45f, 0.15f, 0.65f}, {0.15f, 0.04f, 0.25f}, {0.08f, 0.08f, 0.08f} },
+		};
+		static const FKitDef Scarlet[] = {
+			{ TEXT("Home: scarlet and maroon halves"), 4, {0.95f, 0.18f, 0.12f}, {0.40f, 0.05f, 0.08f}, {0.98f, 0.85f, 0.75f}, {0.40f, 0.05f, 0.08f}, {0.95f, 0.18f, 0.12f}, {0.98f, 0.95f, 0.90f}, {0.65f, 0.90f, 0.15f}, {0.25f, 0.40f, 0.05f}, {0.10f, 0.10f, 0.10f} },
+			{ TEXT("Away: yellow, maroon shoulders"), 10, {0.98f, 0.82f, 0.15f}, {0.40f, 0.05f, 0.08f}, {0.40f, 0.05f, 0.08f}, {0.40f, 0.05f, 0.08f}, {0.98f, 0.82f, 0.15f}, {0.40f, 0.05f, 0.08f}, {0.45f, 0.15f, 0.65f}, {0.15f, 0.04f, 0.25f}, {0.08f, 0.08f, 0.08f} },
+			{ TEXT("Third: teal pinstripes"), 5, {0.00f, 0.50f, 0.50f}, {0.95f, 0.95f, 0.95f}, {0.95f, 0.95f, 0.95f}, {0.00f, 0.25f, 0.28f}, {0.00f, 0.50f, 0.50f}, {0.95f, 0.95f, 0.95f}, {0.65f, 0.90f, 0.15f}, {0.25f, 0.40f, 0.05f}, {0.10f, 0.10f, 0.10f} },
+		};
+		TArray<FPKKit> Kits;
+		auto Add = [&Kits](const FKitDef* Defs, int32 Num)
+		{
+			for (int32 i = 0; i < Num; ++i)
+			{
+				Kits.Add(FromDef(Defs[i]));
+			}
+		};
 		switch (Club)
 		{
-		case 0: // Pitch Kings FC: royal blue with navy pinstripes, white shorts
-			K.Primary = Lin(0.08f, 0.30f, 0.85f); K.Secondary = Lin(0.03f, 0.10f, 0.40f); K.Trim = Lin(0.95f, 0.95f, 0.95f);
-			K.Shorts = Lin(0.95f, 0.95f, 0.97f); K.Socks = Lin(0.08f, 0.30f, 0.85f); K.Number = Lin(0.97f, 0.97f, 0.97f); K.Pattern = 5;
-			K.KeeperPrimary = Lin(0.15f, 0.75f, 0.25f); K.KeeperSecondary = Lin(0.05f, 0.35f, 0.1f); K.KeeperShorts = Lin(0.08f, 0.08f, 0.1f);
-			break;
-		case 1: // Red Rovers: red and white hoops
-			K.Primary = Lin(0.80f, 0.06f, 0.08f); K.Secondary = Lin(0.96f, 0.96f, 0.96f); K.Trim = Lin(0.96f, 0.96f, 0.96f);
-			K.Shorts = Lin(0.96f, 0.96f, 0.96f); K.Socks = Lin(0.80f, 0.06f, 0.08f); K.Number = Lin(0.08f, 0.08f, 0.1f); K.Pattern = 2;
-			K.KeeperPrimary = Lin(0.98f, 0.82f, 0.1f); K.KeeperSecondary = Lin(0.4f, 0.32f, 0.02f); K.KeeperShorts = Lin(0.08f, 0.08f, 0.08f);
-			break;
-		case 2: // Crimson Athletic: crimson and black stripes, gold trim
-			K.Primary = Lin(0.62f, 0.03f, 0.10f); K.Secondary = Lin(0.07f, 0.07f, 0.08f); K.Trim = Lin(0.95f, 0.75f, 0.2f);
-			K.Shorts = Lin(0.07f, 0.07f, 0.08f); K.Socks = Lin(0.07f, 0.07f, 0.08f); K.Number = Lin(0.95f, 0.78f, 0.25f); K.Pattern = 1;
-			K.KeeperPrimary = Lin(0.2f, 0.75f, 0.85f); K.KeeperSecondary = Lin(0.05f, 0.3f, 0.4f); K.KeeperShorts = Lin(0.05f, 0.2f, 0.3f);
-			break;
-		case 3: // Union Rojo: red with a white sash, red shorts
-			K.Primary = Lin(0.85f, 0.12f, 0.12f); K.Secondary = Lin(0.97f, 0.97f, 0.97f); K.Trim = Lin(0.97f, 0.97f, 0.97f);
-			K.Shorts = Lin(0.85f, 0.12f, 0.12f); K.Socks = Lin(0.97f, 0.97f, 0.97f); K.Number = Lin(0.97f, 0.97f, 0.97f); K.Pattern = 3;
-			K.KeeperPrimary = Lin(0.45f, 0.15f, 0.65f); K.KeeperSecondary = Lin(0.15f, 0.04f, 0.25f); K.KeeperShorts = Lin(0.08f, 0.08f, 0.08f);
-			break;
-		default: // Scarlet City: scarlet and maroon halves
-			K.Primary = Lin(0.95f, 0.18f, 0.12f); K.Secondary = Lin(0.40f, 0.05f, 0.08f); K.Trim = Lin(0.98f, 0.85f, 0.75f);
-			K.Shorts = Lin(0.40f, 0.05f, 0.08f); K.Socks = Lin(0.95f, 0.18f, 0.12f); K.Number = Lin(0.98f, 0.95f, 0.9f); K.Pattern = 4;
-			K.KeeperPrimary = Lin(0.65f, 0.9f, 0.15f); K.KeeperSecondary = Lin(0.25f, 0.4f, 0.05f); K.KeeperShorts = Lin(0.1f, 0.1f, 0.1f);
-			break;
+		case 0: Add(Kings, UE_ARRAY_COUNT(Kings)); break;
+		case 1: Add(Rovers, UE_ARRAY_COUNT(Rovers)); break;
+		case 2: Add(Crimson, UE_ARRAY_COUNT(Crimson)); break;
+		case 3: Add(Rojo, UE_ARRAY_COUNT(Rojo)); break;
+		default: Add(Scarlet, UE_ARRAY_COUNT(Scarlet)); break;
 		}
-		return K;
+		return Kits;
 	}
 
 	FPKLook MakeLook(FRandomStream& R, const FPKAttributes& A)
@@ -376,7 +421,8 @@ namespace PKTeams
 			Club.Quality = Defs[c].Quality;
 			Club.Style = Defs[c].Style;
 			Club.Formation = Defs[c].Formation;
-			Club.Kit = MakeKit(c);
+			Club.Kits = MakeKits(c);
+			Club.Kit = Club.Kits[0];
 			TSet<FString> Taken;
 			for (int32 i = 0; i < 18; ++i)
 			{
@@ -425,5 +471,44 @@ namespace PKTeams
 			Clubs.Add(Club);
 		}
 		return Clubs;
+	}
+
+	float KitClash(const FPKKit& A, const FPKKit& B)
+	{
+		// the colour a viewer reads as the shirt's: the first colour, plus the second in proportion to its share of the design
+		auto Main = [](const FPKKit& K)
+		{
+			static const float Share[] = { 0.f, 0.5f, 0.5f, 0.2f, 0.5f, 0.1f, 0.2f, 0.5f, 0.25f, 0.45f, 0.3f, 0.25f };
+			const float W = Share[FMath::Clamp(K.Pattern, 0, (int32)UE_ARRAY_COUNT(Share) - 1)];
+			return FMath::Lerp(K.Primary.ToFColor(true).ReinterpretAsLinear(), K.Secondary.ToFColor(true).ReinterpretAsLinear(), W);
+		};
+		auto Dist = [](const FLinearColor& X, const FLinearColor& Y)
+		{
+			return FMath::Sqrt(FMath::Square(X.R - Y.R) + FMath::Square(X.G - Y.G) + FMath::Square(X.B - Y.B));
+		};
+		const float Shirt = Dist(Main(A), Main(B));
+		const float Shorts = Dist(A.Shorts.ToFColor(true).ReinterpretAsLinear(), B.Shorts.ToFColor(true).ReinterpretAsLinear());
+		// shirts decide it; similar shorts only tip a close call
+		return FMath::Clamp(1.f - Shirt / 0.6f, 0.f, 1.f) * 0.8f + FMath::Clamp(1.f - Shorts / 0.6f, 0.f, 1.f) * 0.2f;
+	}
+
+	int32 ChooseKit(const FPKClub& Club, const FPKKit& Against)
+	{
+		int32 Best = 0;
+		float BestClash = 2.f;
+		for (int32 i = 0; i < Club.Kits.Num(); ++i)
+		{
+			const float C = KitClash(Club.Kits[i], Against);
+			if (C < 0.45f)
+			{
+				return i; // the first that reads clearly different
+			}
+			if (C < BestClash)
+			{
+				Best = i;
+				BestClash = C;
+			}
+		}
+		return Best;
 	}
 }

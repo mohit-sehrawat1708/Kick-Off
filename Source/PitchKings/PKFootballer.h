@@ -41,6 +41,7 @@ enum class EPKKickType : uint8
 // 2 hoops, 3 sash, 4 halves, 5 pinstripes.
 struct FPKKit
 {
+	FString Name = TEXT("Home");
 	FLinearColor Primary = FLinearColor(0.02f, 0.12f, 0.6f);
 	FLinearColor Secondary = FLinearColor(0.01f, 0.03f, 0.15f);
 	FLinearColor Trim = FLinearColor(0.85f, 0.85f, 0.85f);
@@ -440,6 +441,18 @@ protected:
 	void DressMetaHuman(const FPKKit& Kit);
 	void DressHeadFromSet(const struct FPKHead& Head);
 	void SetShirtName(); // surname on the back of the MetaHuman shirt (kit-font character codes)
+	// Cloth: a damped spring per player (the loose shirt and shorts lag the body, swing and settle) and the running
+	// speed / direction, sent to M_PK_PlayerCloth, which moves the hem, sleeves and folds on the GPU.
+	void UpdateClothMotion(float DeltaSeconds);
+	FVector ClothLag = FVector::ZeroVector;
+	FVector ClothLagVel = FVector::ZeroVector;
+	float ClothTwist = 0.f;
+	float ClothTwistVel = 0.f;
+	float ClothSpeed = 0.f;
+	FVector ClothPrevVel = FVector::ZeroVector;
+	float ClothPrevYaw = 0.f;
+	float ClothPrevYawRate = 0.f;
+	bool bClothPrimed = false;
 
 	UPROPERTY()
 	TObjectPtr<UMaterialInterface> SurfaceMaterial;

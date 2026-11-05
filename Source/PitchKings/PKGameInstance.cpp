@@ -45,7 +45,17 @@ void UPKGameInstance::Init()
 			Lineup = Saved->Lineup;
 			Opponent = Saved->Opponent;
 		}
+		UserKit = Saved->UserKit;
 	}
+	// test flags (kit captures): -PKKit=N picks the player's kit, -PKOpponent=N the opponent club
+	FParse::Value(FCommandLine::Get(), TEXT("PKKit="), UserKit);
+	int32 TestOpponent = INDEX_NONE;
+	if (FParse::Value(FCommandLine::Get(), TEXT("PKOpponent="), TestOpponent) && Clubs.IsValidIndex(TestOpponent) && TestOpponent != UserClub)
+	{
+		Opponent = TestOpponent;
+	}
+	ResolveKits();
+	UE_LOG(LogTemp, Log, TEXT("[Kits] %s in %s vs %s in %s"), *UserClubData().Name, *UserClubData().Kit.Name, *OpponentClubData().Name, *OpponentClubData().Kit.Name);
 }
 
 void UPKGameInstance::SaveSettings() const
@@ -117,13 +127,45 @@ void UPKGameInstance::ResetToDefaults()
 	Lineup = PKTeams::AutoPick(UserClubData(), Formation);
 }
 
-void UPKGameInstance::Save() const
+void UPKGameInstance::ResolveKits()
 {
+	if (!Clubs.IsValidIndex(UserClub))
+	{
+		return;
+	}
+	for (FPKClub& Club : Clubs)
+	{
+		if (Club.Kits.Num())
+		{
+			Club.Kit = Club.Kits[0];
+		}
+	}
+	FPKClub& User = Clubs[UserClub];
+	UserKit = User.Kits.Num() ? FMath::Clamp(UserKit, 0, User.Kits.Num() - 1) : 0;
+	if (User.Kits.Num())
+	{
+		User.Kit = User.Kits[UserKit];
+	}
+	if (Clubs.IsValidIndex(Opponent) && Opponent != UserClub && Clubs[Opponent].Kits.Num())
+	{
+		Clubs[Opponent].Kit = Clubs[Opponent].Kits[OpponentKitIndex()];
+	}
+}
+
+int32 UPKGameInstance::OpponentKitIndex() const
+{
+	return Clubs.IsValidIndex(Opponent) && Clubs.IsValidIndex(UserClub) ? PKTeams::ChooseKit(Clubs[Opponent], Clubs[UserClub].Kit) : 0;
+}
+
+void UPKGameInstance::Save()
+{
+	ResolveKits();
 	UPKSaveGame* Data = Cast<UPKSaveGame>(UGameplayStatics::CreateSaveGameObject(UPKSaveGame::StaticClass()));
 	Data->Formation = Formation;
 	Data->Style = Style;
 	Data->Lineup = Lineup;
 	Data->Opponent = Opponent;
+	Data->UserKit = UserKit;
 	UGameplayStatics::SaveGameToSlot(Data, SlotName, 0);
 }
 

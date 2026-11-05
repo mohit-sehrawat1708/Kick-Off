@@ -24,6 +24,8 @@ public:
 	TArray<int32> Lineup;
 	UPROPERTY()
 	int32 Opponent = 1;
+	UPROPERTY()
+	int32 UserKit = 0;
 };
 
 // Saved user settings: key bindings, input, gameplay and HUD options.
@@ -71,7 +73,10 @@ class PITCHKINGS_API UPKGameInstance : public UGameInstance
 public:
 	virtual void Init() override;
 
-	void Save() const;
+	void Save(); // also re-resolves both teams' kits
+	// The kits for the next match: the player's chosen kit, and the opponent's first kit that doesn't clash with it.
+	void ResolveKits();
+	int32 OpponentKitIndex() const;
 	void SaveSettings() const;
 	void LoadSettings();
 	void ResetToDefaults();
@@ -90,6 +95,7 @@ public:
 	int32 Opponent = 1;
 	int32 Formation = 0;
 	int32 Style = 0;
+	int32 UserKit = 0; // index into the player's club's Kits
 	TArray<int32> Lineup; // squad index per formation slot
 	bool bSeenLanding = false;
 	FPKUserSettings Settings;
