@@ -5,7 +5,7 @@ and an AI opponent. Prototype; the in-game title is still its working name, *Pit
 
 ## Download and play (Windows)
 
-1. Download `KickOff_Windows_v1.5.zip` from the [latest release](../../releases/latest) and unzip the whole folder.
+1. Download `KickOff_Windows_v1.6.zip` from the [latest release](../../releases/latest) and unzip the whole folder.
 2. Run `PitchKings.exe`. If Windows says `MSVCP140.dll` / `VCRUNTIME140.dll` is missing, run
    `Engine\Extras\Redist\en-us\vc_redist.x64.exe` once. SmartScreen: *More info → Run anyway* (the game is not code-signed).
 3. `HOW_TO_PLAY.txt` in the zip has the controls and system requirements (Windows 10/11 64-bit, DirectX 12 GPU, 8 GB RAM).
@@ -30,13 +30,13 @@ City Sample Crowds (free on Fab) in `Content/CitySampleCrowd`, and MetaHuman Cre
 
 # Developer notes (Pitch Kings — realistic base)
 
-Full-size 11-a-side football on a 105 × 68 m pitch with UE5 mannequin players, realistic daylight and a
-code-built stadium. This is the foundation for future upgrades (Motion Matching, real animations, menus, modes).
+Full-size 11-a-side football on a 105 × 68 m pitch. Players have MetaHuman heads (City Sample Crowds) on a smoothed
+UE5 mannequin body, with realistic daylight and a code-built stadium with a 3D crowd.
 
 ## Run it
 
 1. Open `PitchKings.uproject`. The editor opens `/Game/Maps/Stadium` (sun, sky, clouds, fog, post process + the `PKPitch` stadium actor).
-2. Press **Play** (Alt+P) and click into the viewport. You are **BLUE** (white/blue kit), attacking right.
+2. Press **Play** (Alt+P) and click into the viewport. You are **BLUE** (Pitch Kings FC, in the kit chosen in Team setup), attacking right.
 
 Rebuild after C++ changes (editor closed):
 
@@ -58,7 +58,7 @@ Launching the game (or pressing Play in the editor) opens the front end over a s
 | --- | --- |
 | Landing | Pitch Kings logo, "press any key" |
 | Home | KICK OFF (you play BLUE), SPECTATE AI vs AI, TEAM SETUP, CONTROLS, QUIT; the next-match card shows both clubs, formations, styles, team ratings and your starting XI |
-| Team setup | formation (4-4-2, 4-3-3, 4-2-3-1, 3-5-2, 5-3-2), play style, opponent club; pitch view of the XI and the 18-man squad. Pick a position on the pitch, then a squad player (bench players swap in, two positions swap the starters). Ring colour = position fit (blue natural, orange nearby, red out of position: out-of-position players play with lower ratings). AUTO PICK BEST XI, RESET TEAM, player detail with all six ratings and traits |
+| Team setup | formation (4-4-2, 4-3-3, 4-2-3-1, 3-5-2, 5-3-2), play style, opponent club, KIT (eight to choose from; the opponent switches to its first kit that doesn't clash); pitch view of the XI and the 18-man squad. Pick a position on the pitch, then a squad player (bench players swap in, two positions swap the starters). Ring colour = position fit (blue natural, orange nearby, red out of position: out-of-position players play with lower ratings). AUTO PICK BEST XI, RESET TEAM, player detail with all six ratings and traits |
 | Local 1v1 | two players on one screen, each with their own device: every connected device shows as a chip; push LEFT (BLUE, player 1) or RIGHT (RED, player 2) on that device, Enter / A / Start kicks off. Keyboard vs gamepad or gamepad vs gamepad. Arrow buttons work with the mouse |
 | Settings | CONTROLS: rebind every keyboard action (click, press a key; Esc cancels, Backspace clears; a key already in use swaps), invert left/right and up/down, stick dead zone, vibration. GRAPHICS: display mode, resolution, overall quality + shadows / textures / effects / anti-aliasing / view distance, render scale, VSync, frame-rate limit, FPS counter, auto-detect. GAMEPLAY: match length, difficulty (computer team ratings), camera distance, shirt numbers, help panel, mini-map. Saved in the `PitchKingsSettings` slot; graphics in GameUserSettings.ini. Also reachable from the pause menu |
 | Controls | keyboard and gamepad table | (shows your current bindings)
@@ -85,8 +85,8 @@ Command-line test modes (`-PKAutoTest`, `-PKSpectate`, ...) and `-PKNoMenu` skip
 
 ## Packaged build (play on other PCs)
 
-`Downloads\PitchKings_Windows_v0.5.zip` (266 MB; 400 MB unpacked) is a Windows 64-bit Shipping build: unzip, run `PitchKings.exe`
-(`HOW_TO_PLAY.txt` inside has requirements, controls and the VC++ runtime installer path). Rebuild it with:
+The release zip (`KickOff_Windows_v1.6.zip` on the [releases page](../../releases)) is a Windows 64-bit Shipping build: unzip, run
+`PitchKings.exe` (`HOW_TO_PLAY.txt` inside has requirements, controls and the VC++ runtime installer path). Rebuild it with:
 
 ```
 "C:\Program Files\Epic Games\UE_5.8\Engine\Build\BatchFiles\RunUAT.bat" BuildCookRun -project="%CD%\PitchKings.uproject" -noP4 -platform=Win64 -clientconfig=Shipping -build -cook -stage -pak -iostore -compressed -prereqs -archive -archivedirectory="%CD%\..\PitchKings_Build" -nodebuginfo -unattended
@@ -185,8 +185,24 @@ new / old (`-PKOldKeeper`, `-PKOldLine`), each skill move vs a defender, advanta
 
 ## Kits and player looks
 
-Every player wears his club's kit and has his own look, all painted on the UE mannequin by two materials built by
-`Tools/editor_scripts/make_kit_material.py` (run headless with `UnrealEditor-Cmd ... -run=pythonscript -script=...`):
+Every player wears his club's kit and has his own look. Players are built from a smoothed mannequin body
+(`SKM_PK_Body`, `make_player_body.py`), a City Sample Crowds MetaHuman head, hair, boots, and a crew-neck shirt and
+shorts painted by **M_PK_PlayerCloth** (`Tools/editor_scripts/make_player_mh.py`, run headless with
+`UnrealEditor-Cmd ... -run=pythonscript -script=...`):
+
+- **Kit patterns** (12): plain, stripes, hoops, sash, halves, pinstripes, chevron, quarters, chest band, fade,
+  contrast shoulders, centre stripe. Lettering (back number, surname, front number, sponsor) uses the kit font from
+  `Tools/art/make_kit_font.py`.
+- **Cloth motion**: a damped spring per player drives hem and sleeve sway, billowing and moving folds in the shirt and shorts.
+- **Club kits** (`PKTeams::MakeKits`): Pitch Kings FC has eight (Home: royal pinstripes, Away: white chevron, Third:
+  black and volt, plus sky blue quarters, teal fade, purple and gold, sunset orange, retro green hoops); every opponent
+  has home, away and third kits. Red Rovers red-white hoops, Crimson Athletic crimson-black stripes with gold, Union Rojo
+  red with a white sash, Scarlet City scarlet-maroon halves. Each keeper wears his own colours with long sleeves and gloves.
+- **Kit choice**: you pick your kit in Team setup (saved with the team sheet); the opponent wears the first of its kits
+  that doesn't clash (`PKTeams::KitClash` / `ChooseKit`: shirt colour decides 80 %, shorts 20 %).
+
+The older mannequin-painted kit is still the fallback (missing MetaHuman assets, or `-PKMannyKit`), built by
+`Tools/editor_scripts/make_kit_material.py`:
 
 - **M_PK_Kit** (body): each point of the mesh is classified by its distance to the mannequin's bones in the reference
   pose (pre-skinned position), so the shirt, sleeves (short, keeper long), shorts, socks with turnover, boots (sole and
@@ -195,9 +211,6 @@ Every player wears his club's kit and has his own look, all painted on the UE ma
   the chest.
 - **M_PK_KitShell** (masked, world position offset): a second copy of the body that follows its pose (leader pose)
   and stands the cloth off the skin: sleeve and shorts hems, flared shorts, sock tops, hair volume.
-- Club kits (`PKTeams::MakeKit`): Pitch Kings FC blue pinstripes / white shorts, Red Rovers red-white hoops, Crimson
-  Athletic crimson-black stripes with gold, Union Rojo red with a white sash, Scarlet City scarlet-maroon halves; each
-  keeper in his own colours with long sleeves and gloves.
 - Player looks (`PKTeams::MakeLook`, fixed per player): 7 skin tones, 6 hair colours, 5 hair styles (shaved .. big),
   stubble / beard, 7 boot colours, height 0.95-1.04 and build following the Physical rating.
 - `-PKKitShots -PKNoMenu` lines both teams up and screenshots fronts, backs, keeper and a head close-up.
@@ -351,22 +364,29 @@ The autotest log line also reports kicks, air kicks, contact error, kick facing 
 | System | File |
 | --- | --- |
 | Constants (pitch, ball, speeds, kits) | `PKTypes.h` |
-| Footballer: mesh, kits, stances, movement model, kick/tackle/dive | `PKFootballer.*` |
-| Locomotion (8-way walk/jog, keeper idle/shuffle) + football action layer + procedural lean, crouch, head look | `PKAnimInstance.*` |
+| Footballer: body, MetaHuman head, kits, cloth motion, stances, movement model, kick/tackle/dive | `PKFootballer.*`, `PKHeadSet.h` |
+| Locomotion (8-way walk/jog, keeper idle/shuffle) + football action layer + procedural lean, crouch, head look, celebration | `PKAnimInstance.*`, `PKCopyPoseAnimInstance.*` |
 | Ball: fixed-step physics, curl, posts/net, held/placed states | `PKBall.*` |
-| Match: 4-4-2 AI, dribbling, steals, pickups, restarts, clock | `PKGameMode.*` |
+| Match: AI for every formation, dribbling, steals, pickups, restarts, fouls, subs, replay, clock | `PKGameMode.*` |
+| Feature and visual test modes (`-PKFeatureTest`, critic shots) | `PKFeatureTest.cpp`, `PKCritic.cpp` |
 | Input + broadcast camera, menu camera, pause | `PKPlayerController.*` |
-| Front end (Slate): landing, home, team setup, controls, pause | `PKMenu.*` |
-| Clubs, squads, formations, position fit, auto pick | `PKTeamData.*` |
+| Per-device input routing (local 1v1) | `PKInput.*` |
+| Front end (Slate): landing, home, team setup, local 1v1, settings, controls, pause, substitutions | `PKMenu.*`, `PKMenuSettings.cpp`, `PKMenuSubs.cpp` |
+| Settings and key bindings | `PKSettings.*` |
+| Clubs, squads, formations, kits, position fit, auto pick | `PKTeamData.*` |
 | Team sheet + save game | `PKGameInstance.*` |
 | HUD | `PKHUD.*` |
-| Stadium (construction script) | `PKPitch.*` |
+| Stadium and crowd (rebuilt in `BeginPlay`) | `PKPitch.*` |
 
-Content: `Content/Characters/Mannequins` (UE template mannequin), `Content/PitchKings/Materials` (M_PK_Surface, M_PK_Grass, M_PK_Crowd), `Content/Maps/Stadium`.
+Content: `Content/Characters/Mannequins` (UE template mannequin and animations), `Content/PitchKings` (materials, characters,
+stadium, 3D crowd, UI, data), `Content/CitySampleCrowd` (heads and clothing), `Content/Maps/Stadium`.
 `Tools/ue_mcp.py` drives the open editor over MCP (used to build the materials and the map).
 
 ## Known limits / next upgrades
 
-- The soccer pack has no celebrations, ground first-touch trap or dribble-turn clips; locomotion is still the template walk/jog blend (Motion Matching from Epic's Game Animation Sample is the next locomotion upgrade).
-- No substitutions, advantage rule, stamina, menus or Season mode yet; keepers are only booked (no substitute keeper).
-- Crowd is a material on stepped tiers, not individual spectators.
+- Locomotion is still the template walk/jog blend (Motion Matching from Epic's Game Animation Sample is the next
+  locomotion upgrade). The soccer pack has no celebration, ground first-touch trap or dribble-turn clips, so the
+  celebration and outside-foot cuts are procedural poses.
+- Single matches only: no Season, league or cup mode, and no online play.
+- Visual quality is still below target (critic rounds score about 5.5 / 10 against a pass mark of 8.5): hair, faces,
+  crowd poses, grass, lighting, goal nets and the city backdrop are open items. See `Tools/critic/ISSUES.md`.
